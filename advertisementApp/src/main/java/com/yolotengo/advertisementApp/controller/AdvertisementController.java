@@ -1,6 +1,7 @@
 package com.yolotengo.advertisementApp.controller;
 
 import com.yolotengo.advertisementApp.service.AdvertisementService;
+import com.yolotengo.commonLibApp.dto.AdvertisementDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.PathParam;
+
 /**
  * Created by dgallego on 23/11/2017.
  */
 @RestController
-@RequestMapping("/main")
+@RequestMapping("/advertisement")
 public class AdvertisementController {
 
     public static final Logger logger = LoggerFactory.getLogger(AdvertisementController.class);
@@ -37,6 +40,16 @@ public class AdvertisementController {
     public ResponseEntity<?> test2() {
         advertisementService.test2();
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/creation/advertisement", method = RequestMethod.POST)
+    public ResponseEntity<?> creationAdvertisement(@PathParam("adDTO") AdvertisementDTO adDTO) {
+        try {
+            advertisementService.creationAdvertisement(adDTO);
+            return ResponseEntity.ok(HttpStatus.OK);
+        }catch (Exception e){
+            return ResponseEntity.ok(HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 
 }

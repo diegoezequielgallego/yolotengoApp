@@ -47,4 +47,7 @@ public class AdvertisementService {
         System.out.println("Found key " + key + ", value=" + cacheService.getFromCache(key,Advertisement.class));
     }
 
+    public void creationAdvertisement(AdvertisementDTO adDTO) {
+
+    }
 }
