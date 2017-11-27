@@ -1,0 +1,17 @@
+server:
+  port: 8091
+  contextPath: /advertisementApp
+
+datasource:
+  sampleapp:
+    url: jdbc:h2:~/test
+    username: SA
+    password:
+    driverClassName: org.h2.Driver
+    defaultSchema:
+    maxPoolSize: 10
+    hibernate:
+      hbm2ddl.method: create-drop
+      show_sql: false
+      format_sql: false
+      dialect: org.hibernate.dialect.H2Dialect
