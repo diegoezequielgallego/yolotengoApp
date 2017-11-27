@@ -25,20 +25,18 @@ public class AdvertisementService {
     CacheService cacheService;
 
     public void test() {
-        AdvertisementDTO dto = new AdvertisementDTO();
-
         Advertisement ad = new Advertisement();
         ad.setCreationDate(new Date());
         ad.setDescription("esto es un test");
-        ad.setUser("Rambo");
+        ad.setUserId("Rambo");
         advertisementRepository.save(ad);
         List<Advertisement> listAdvertisement = advertisementRepository.findByUser("Rambo", 1);
 
-        cacheService.putInCache(ad.getUser(), listAdvertisement.get(0));
+        cacheService.putInCache(ad.getUserId(), listAdvertisement.get(0));
 
         Advertisement adDeserialice = cacheService.getFromCache("Rambo", Advertisement.class);
 
-        System.out.println("Found key Rambo, value=" + adDeserialice.getUser());
+        System.out.println("Found key Rambo, value=" + adDeserialice.getUserId());
 
     }
 
@@ -48,6 +46,7 @@ public class AdvertisementService {
     }
 
     public void creationAdvertisement(AdvertisementDTO adDTO) {
+
 
     }
 }
