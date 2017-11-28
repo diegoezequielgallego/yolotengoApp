@@ -16,4 +16,8 @@ public interface AdvertisementRepository extends CassandraRepository<Advertiseme
     List<Advertisement> findByUser(String userId, Integer limit);
 
 
+    @Query("SELECT * FROM advertisement WHERE latitue>?0 AND latitude<?1")
+    List<Advertisement> findNearby(Double latitudeMin, Double latitudeMax);
+
+
 }

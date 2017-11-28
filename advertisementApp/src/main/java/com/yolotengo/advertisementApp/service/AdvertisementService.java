@@ -39,6 +39,9 @@ public class AdvertisementService {
         ad.setUserId("Rambo");
         ad.setAreaLevel1("Tablada");
         ad.setAreaLevel2("La Matanza");
+        ad.setLatitue(-34.687886);
+        ad.setLongitude(-58.529208);
+
         advertisementRepository.save(ad);
         List<Advertisement> listAdvertisement = advertisementRepository.findByUser("Rambo", 1);
 
@@ -48,7 +51,7 @@ public class AdvertisementService {
         System.out.println("Found key Rambo, value=" + adDeserialice.getUserId());
     }
 
-    public void test2(){
+    public void test2() {
         String key = "Rambo";
         System.out.println("Found key " + key + ", value=" + cacheService.getFromCache(key, Advertisement.class));
 
@@ -79,7 +82,8 @@ public class AdvertisementService {
         ad.setDelivery(adrDTO.isDelivery());
         ad = advertisementRepository.save(ad);
 
-        cacheService.putInCache(String.valueOf(ad.getId()), ad);
+        //cacheService.putInCache(String.valueOf(ad.getId().getLeastSignificantBits()), ad);
         return ad;
     }
+
 }

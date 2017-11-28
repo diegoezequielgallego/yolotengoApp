@@ -34,15 +34,14 @@ public class Advertisement {
     @Column(value = "categoryId")
     private String categoryId;
 
-    @Column(value = "items")
-    private String items;
-
     @Column(value = "picture")
     private String picture;
 
+    //@PrimaryKeyColumn(name = "latitue",ordinal = 2,type = PrimaryKeyType.PARTITIONED)
     @Column(value = "latitue")
     private double latitue;
 
+    //@PrimaryKeyColumn(name = "longitude",ordinal = 3,type = PrimaryKeyType.PARTITIONED)
     @Column(value = "longitude")
     private double longitude;
 
@@ -96,7 +95,7 @@ public class Advertisement {
         return itemJason;
     }
 
-    public void setItemJason(String description) {
+    public void setItemJason(String itemJason) {
         this.itemJason = itemJason;
     }
 
@@ -106,14 +105,6 @@ public class Advertisement {
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public String getItems() {
-        return items;
-    }
-
-    public void setItems(String items) {
-        this.items = items;
     }
 
     public String getPicture() {
