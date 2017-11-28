@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.yolotengo.advertisementApp.model.Advertisement;
 import com.yolotengo.advertisementApp.repositories.AdvertisementRepository;
 import com.yolotengo.commonLibApp.dto.AdvertisementDTO;
+import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
 import com.yolotengo.commonLibApp.dto.ItemDTO;
 import org.geonames.Toponym;
 import org.geonames.WebService;
@@ -24,6 +25,9 @@ public class AdvertisementService {
 
     @Autowired
     AdvertisementRepository advertisementRepository;
+
+    @Autowired
+    SerializationService serializationService;
 
     @Autowired
     CacheService cacheService;
@@ -60,8 +64,15 @@ public class AdvertisementService {
 
     }
 
-    public void creationAdvertisement(AdvertisementDTO adDTO) {
+    public Advertisement creationAdvertisement(AdvertisementRequestDTO adrDTO) {
+        Advertisement ad = new Advertisement();
+        ad.setCreationDate(new Date());
+        ad.setItemJason(serializationService.serializer(adrDTO.getItems()));
+        ad.setUserId(adrDTO.getUserId());
+        ad.setAreaLevel1("Tablada");
+        ad.setAreaLevel2("La Matanza");
+        advertisementRepository.save(ad);
 
-
+        return null;
     }
 }

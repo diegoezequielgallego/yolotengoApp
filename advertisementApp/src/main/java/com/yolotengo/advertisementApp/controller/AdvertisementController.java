@@ -2,6 +2,7 @@ package com.yolotengo.advertisementApp.controller;
 
 import com.yolotengo.advertisementApp.service.AdvertisementService;
 import com.yolotengo.commonLibApp.dto.AdvertisementDTO;
+import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +44,9 @@ public class AdvertisementController {
     }
 
     @RequestMapping(value = "/creation/advertisement", method = RequestMethod.POST)
-    public ResponseEntity<?> creationAdvertisement(@PathParam("adDTO") AdvertisementDTO adDTO) {
+    public ResponseEntity<?> creationAdvertisement(@PathParam("adDTO") AdvertisementRequestDTO adrDTO) {
         try {
-            advertisementService.creationAdvertisement(adDTO);
+            advertisementService.creationAdvertisement(adrDTO);
             return ResponseEntity.ok(HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.ok(HttpStatus.SERVICE_UNAVAILABLE);

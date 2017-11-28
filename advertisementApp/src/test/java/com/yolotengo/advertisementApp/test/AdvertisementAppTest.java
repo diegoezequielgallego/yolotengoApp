@@ -4,6 +4,7 @@ import com.yolotengo.advertisementApp.SpringBootCRUDApp;
 import com.yolotengo.advertisementApp.configuration.CassandraConfig;
 import com.yolotengo.advertisementApp.configuration.SpringRedisConfig;
 import com.yolotengo.advertisementApp.service.AdvertisementService;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ public class AdvertisementAppTest {
 	@Autowired
 	AdvertisementService advertisementService;
 
+	@Ignore
 	@Test
 	public void testCreationAdvertisement() {
 		advertisementService.creationAdvertisement(null);

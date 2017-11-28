@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class AdvertisementRequestDTO {
 
-    private long userId;
+    private String userId;
 
     private String categoryId;
     private List<ItemDTO> items;
@@ -23,11 +23,11 @@ public class AdvertisementRequestDTO {
     private boolean righNow;
     private boolean delivery;
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
