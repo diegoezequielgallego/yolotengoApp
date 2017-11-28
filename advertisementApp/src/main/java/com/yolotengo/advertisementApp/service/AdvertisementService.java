@@ -69,10 +69,17 @@ public class AdvertisementService {
         ad.setCreationDate(new Date());
         ad.setItemJason(serializationService.serializer(adrDTO.getItems()));
         ad.setUserId(adrDTO.getUserId());
-        ad.setAreaLevel1("Tablada");
-        ad.setAreaLevel2("La Matanza");
-        advertisementRepository.save(ad);
+        ad.setAreaLevel1(adrDTO.getAreaLevel1());
+        ad.setAreaLevel2(adrDTO.getAreaLevel2());
+        ad.setCategoryId(adrDTO.getCategoryId());
+        ad.setPicture(adrDTO.getPicture());
+        ad.setLatitue(adrDTO.getLatitue());
+        ad.setLongitude(adrDTO.getLongitude());
+        ad.setRighNow(adrDTO.isRighNow());
+        ad.setDelivery(adrDTO.isDelivery());
+        ad = advertisementRepository.save(ad);
 
-        return null;
+        cacheService.putInCache(String.valueOf(ad.getId()), ad);
+        return ad;
     }
 }

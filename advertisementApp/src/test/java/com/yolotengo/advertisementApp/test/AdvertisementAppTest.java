@@ -19,7 +19,6 @@ public class AdvertisementAppTest {
 	@Autowired
 	AdvertisementService advertisementService;
 
-	@Ignore
 	@Test
 	public void testCreationAdvertisement() {
 		advertisementService.creationAdvertisement(null);
