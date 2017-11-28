@@ -29,6 +29,8 @@ public class AdvertisementService {
         ad.setCreationDate(new Date());
         ad.setDescription("esto es un test");
         ad.setUserId("Rambo");
+        ad.setAreaLevel1("Tablada");
+        ad.setAreaLevel2("La Matanza");
         advertisementRepository.save(ad);
         List<Advertisement> listAdvertisement = advertisementRepository.findByUser("Rambo", 1);
 

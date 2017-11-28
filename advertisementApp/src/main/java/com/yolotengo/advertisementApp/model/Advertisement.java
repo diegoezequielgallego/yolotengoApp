@@ -16,16 +16,16 @@ public class Advertisement {
     @PrimaryKeyColumn(name = "id",ordinal = 0,type = PrimaryKeyType.CLUSTERED)
     private UUID id = UUIDs.timeBased();
 
-    @PrimaryKeyColumn(name="creationDate",ordinal = 1,type = PrimaryKeyType.PARTITIONED)
+    @Column(value = "creationDate")
     private Date creationDate;
 
-    @PrimaryKeyColumn(name="areaLevel1",ordinal = 2,type = PrimaryKeyType.PARTITIONED)
+    @Column(value = "areaLevel1")
     private String areaLevel1;
 
-    @PrimaryKeyColumn(name="areaLevel2",ordinal = 3,type = PrimaryKeyType.PARTITIONED)
+    @Column(value = "areaLevel2")
     private String areaLevel2;
 
-    @PrimaryKeyColumn(name="userId",ordinal = 4,type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(name = "userId",ordinal = 1,type = PrimaryKeyType.PARTITIONED)
     private String userId;
 
     @Column(value = "description")

@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface AdvertisementRepository extends CassandraRepository<Advertisement> {
 
-    @Query("SELECT * FROM advertisement WHERE user=?0 LIMIT ?1")
-    List<Advertisement> findByUser(String user, Integer limit);
+    @Query("SELECT * FROM advertisement WHERE userId=?0 LIMIT ?1")
+    List<Advertisement> findByUser(String userId, Integer limit);
 
 
 }
