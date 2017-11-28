@@ -10,34 +10,19 @@ import org.springframework.stereotype.Service;
 @Scope("singleton")
 public class CacheService {
 
-    private Gson gson;
-
     @Autowired
     private StringRedisTemplate template;
 
+    @Autowired
+    private SerializationService serializationService;
+
     public void putInCache(String key, Object obj){
-        String objSerialice= serializer(obj);
+        String objSerialice= serializationService.serializer(obj);
         template.opsForValue().set(key, objSerialice);
     }
 
     public  <T> T getFromCache(String key, Class<T> objClass){
-        return deserializer(template.opsForValue().get(key),objClass);
-    }
-
-
-    private String serializer(Object obj){
-        return getGson().toJson(obj);
-    }
-
-    private <T> T deserializer(String obj, Class<T> objClass){
-        return getGson().fromJson(obj, objClass);
-    }
-
-    private Gson getGson(){
-        if (gson == null){
-            gson = new Gson();
-        }
-        return gson;
+        return serializationService.deserializer(template.opsForValue().get(key),objClass);
     }
 
 }

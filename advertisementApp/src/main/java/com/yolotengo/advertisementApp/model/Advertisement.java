@@ -28,8 +28,8 @@ public class Advertisement {
     @PrimaryKeyColumn(name = "userId",ordinal = 1,type = PrimaryKeyType.PARTITIONED)
     private String userId;
 
-    @Column(value = "description")
-    private String description;
+    @Column(value = "itemJason")
+    private String itemJason;
 
     @Column(value = "categoryId")
     private String categoryId;
@@ -92,12 +92,12 @@ public class Advertisement {
         this.userId = userId;
     }
 
-    public String getDescription() {
-        return description;
+    public String getItemJason() {
+        return itemJason;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setItemJason(String description) {
+        this.itemJason = itemJason;
     }
 
     public String getCategoryId() {

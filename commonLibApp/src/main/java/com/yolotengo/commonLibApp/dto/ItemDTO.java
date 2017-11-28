@@ -5,6 +5,11 @@ package com.yolotengo.commonLibApp.dto;
  */
 public class ItemDTO {
 
+    public ItemDTO(String name, String description){
+        this.name = name;
+        this.description = description;
+    }
+
     private String name;
     private String description;
 
