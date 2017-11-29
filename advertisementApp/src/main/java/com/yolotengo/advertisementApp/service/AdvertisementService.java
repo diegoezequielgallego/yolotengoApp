@@ -21,16 +21,16 @@ public class AdvertisementService {
     public static final Logger logger = LoggerFactory.getLogger(AdvertisementService.class);
 
     @Autowired
-    AdvertisementRepository advertisementRepository;
+    private AdvertisementRepository advertisementRepository;
 
     @Autowired
-    SerializationService serializationService;
+    private SerializationService serializationService;
 
     @Autowired
-    CacheService cacheService;
+    private CacheService cacheService;
 
     @Autowired
-    GeoLocationService geoLocationService;
+    private GeoLocationService geoLocationService;
 
     public Advertisement creationAdvertisement(AdvertisementRequestDTO adrDTO) {
         Advertisement ad = new Advertisement();

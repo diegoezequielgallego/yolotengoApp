@@ -39,19 +39,19 @@ public class AdvertisementAppTest {
     public static final Logger logger = LoggerFactory.getLogger(AdvertisementAppTest.class);
 
     @Autowired
-    AdvertisementService advertisementService;
+    private AdvertisementService advertisementService;
 
     @Autowired
-    AdvertisementRepository advertisementRepository;
+    private AdvertisementRepository advertisementRepository;
 
     @Autowired
-    SerializationService serializationService;
+    private SerializationService serializationService;
 
     @Autowired
-    CacheService cacheService;
+    private CacheService cacheService;
 
     @Autowired
-    GeoLocationService geoLocationService;
+    private GeoLocationService geoLocationService;
 
     @Test
     public void testCreationAdvertisement() {
