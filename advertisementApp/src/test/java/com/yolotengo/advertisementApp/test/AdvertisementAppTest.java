@@ -127,7 +127,7 @@ public class AdvertisementAppTest {
             cityList.add(city.getName());
         }
 
-        for (long i = 0; i <= 1000000; i++) {
+        for (long i = 0; i <= 10000; i++) {
 
             r = new Random();
             randomValueLatitue = rangeMinLatitue + (rangeMaxLatitue - rangeMinLatitue) * r.nextDouble();
