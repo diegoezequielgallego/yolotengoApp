@@ -14,12 +14,11 @@ import com.yolotengo.advertisementApp.model.Advertisement;
 import com.yolotengo.advertisementApp.repositories.AdvertisementRepository;
 import com.yolotengo.advertisementApp.service.AdvertisementService;
 import com.yolotengo.advertisementApp.service.CacheService;
+import com.yolotengo.advertisementApp.service.GeoLocationService;
 import com.yolotengo.advertisementApp.service.SerializationService;
-import com.yolotengo.advertisementApp.util.Until;
 import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
 import com.yolotengo.commonLibApp.dto.ItemDTO;
 import org.geonames.Toponym;
-import org.geonames.WebService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -51,6 +50,9 @@ public class AdvertisementAppTest {
     @Autowired
     CacheService cacheService;
 
+    @Autowired
+    GeoLocationService geoLocationService;
+
     @Test
     public void testCreationAdvertisement() {
         AdvertisementRequestDTO adrDTO = new AdvertisementRequestDTO();
@@ -61,7 +63,7 @@ public class AdvertisementAppTest {
         adrDTO.setCreationDate(new Date());
         adrDTO.setAreaLevel1("Tablada");
         adrDTO.setAreaLevel2("La Matanza");
-        adrDTO.setLatitue(-34.687886);
+        adrDTO.setLatitude(-34.687886);
         adrDTO.setLongitude(-58.529208);
         adrDTO.setRighNow(true);
         adrDTO.setDelivery(true);
@@ -118,12 +120,11 @@ public class AdvertisementAppTest {
         ad.setDelivery(true);
 
 
-        WebService.setUserName("diegoezequielgallego");
         //lat log radio y cant
-        List<Toponym> geonamesList = WebService.findNearbyPlaceName(-34.687886, -58.529208, 30.0, 500);
+        List<Toponym> geoList = geoLocationService.getNearbyPlace(-34.687886, -58.529208, 30.0, 500);
         List<String> cityList = new ArrayList<>();
 
-        for (Toponym city : geonamesList) {
+        for (Toponym city : geoList) {
             cityList.add(city.getName());
         }
 
@@ -160,7 +161,6 @@ public class AdvertisementAppTest {
 
             cacheService.putAdvertisementCache(ad);
         }
-
     }
 
 
@@ -204,7 +204,7 @@ public class AdvertisementAppTest {
         Double uncleLat = -34.688277;
         Double uncleLon = -58.528735;
 
-        Double distance = Until.calculateDistance(homeLat, uncleLat, homeLon, uncleLon);
+        Double distance = geoLocationService.calculateDistance(homeLat, uncleLat, homeLon, uncleLon);
         logger.warn("distance Diego s home to Uncle: " + distance);
         Assert.isTrue(distance.compareTo(new Double("300")) == -1, "");
 

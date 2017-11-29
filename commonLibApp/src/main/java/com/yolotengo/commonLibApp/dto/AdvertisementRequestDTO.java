@@ -17,7 +17,7 @@ public class AdvertisementRequestDTO {
 
     private String areaLevel1;
     private String areaLevel2;
-    private double latitue;
+    private double latitude;
     private double longitude;
 
     private boolean righNow;
@@ -79,12 +79,12 @@ public class AdvertisementRequestDTO {
         this.areaLevel2 = areaLevel2;
     }
 
-    public double getLatitue() {
-        return latitue;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLatitue(double latitue) {
-        this.latitue = latitue;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
     public double getLongitude() {
