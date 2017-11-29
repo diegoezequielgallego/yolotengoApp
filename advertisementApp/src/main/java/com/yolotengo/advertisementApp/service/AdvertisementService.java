@@ -82,7 +82,7 @@ public class AdvertisementService {
         ad.setDelivery(adrDTO.isDelivery());
         ad = advertisementRepository.save(ad);
 
-        //cacheService.putInCache(String.valueOf(ad.getId().getLeastSignificantBits()), ad);
+        cacheService.putAdvertisementCache(ad);
         return ad;
     }
 

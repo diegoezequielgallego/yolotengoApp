@@ -13,6 +13,7 @@ import com.yolotengo.advertisementApp.configuration.SpringRedisConfig;
 import com.yolotengo.advertisementApp.model.Advertisement;
 import com.yolotengo.advertisementApp.repositories.AdvertisementRepository;
 import com.yolotengo.advertisementApp.service.AdvertisementService;
+import com.yolotengo.advertisementApp.service.CacheService;
 import com.yolotengo.advertisementApp.service.SerializationService;
 import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
 import com.yolotengo.commonLibApp.dto.ItemDTO;
@@ -23,6 +24,10 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
@@ -46,6 +51,9 @@ public class AdvertisementAppTest {
     @Autowired
     SerializationService serializationService;
 
+    @Autowired
+    CacheService cacheService;
+
     @Test
     public void testCreationAdvertisement() {
         AdvertisementRequestDTO adrDTO = new AdvertisementRequestDTO();
@@ -62,10 +70,15 @@ public class AdvertisementAppTest {
         adrDTO.setDelivery(true);
 
         Advertisement ad = advertisementService.creationAdvertisement(adrDTO);
+
         String advertisementId = ad.getId().toString();
+        String advertisementArea = ad.getAreaLevel1();
+
         advertisementRepository.delete(ad);
         Assert.notNull(advertisementId, "");
 
+        ad = cacheService.getAdvertisementCache(advertisementArea, advertisementId);
+        Assert.notNull(ad, "");
     }
 
 
@@ -87,23 +100,24 @@ public class AdvertisementAppTest {
 
         WebService.setUserName("diegoezequielgallego");
         //lat log radio y cant
+        List<Toponym> geonamesList = WebService.findNearbyPlaceName(-34.687886, -58.529208, 30.0, 500);
         List<String> cityList = new ArrayList<>();
 
-        for (Toponym city: WebService.findNearbyPlaceName(-34.687886, -58.529208,30.0, 2000)){
+        for (Toponym city : geonamesList) {
             cityList.add(city.getName());
         }
 
         advertisementRepository.deleteAll();
         String items = serializationService.serializer(new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete"))));
 
-        for (long i = 0; i < 1000000; i++) {
+        for (long i = 0; i < 10000; i++) {
 
             r = new Random();
             randomValueLatitue = rangeMinLatitue + (rangeMaxLatitue - rangeMinLatitue) * r.nextDouble();
             r = new Random();
             randomValueLongitude = rangeMinLongitude + (rangeMaxLongitude - rangeMinLongitude) * r.nextDouble();
 
-            int randomCity = 0 + (int)(Math.random() * cityList.size());
+            int randomCity = 0 + (int) (Math.random() * cityList.size());
 
             RegularStatement insert = QueryBuilder.insertInto("advertisement_keyspace", "advertisement").values(
                     new String[]{"id", "creationDate", "areaLevel1", "areaLevel2", "userId", "itemJason"
@@ -117,8 +131,6 @@ public class AdvertisementAppTest {
             if (i % 100 == 0) {
                 session.execute(batch);
                 batch = QueryBuilder.unloggedBatch();
-            }
-            if (i % 10000 == 0) {
                 logger.warn("create advertisement number:" + i);
             }
 
@@ -137,7 +149,7 @@ public class AdvertisementAppTest {
         cityList.add("Aldo Bonzi");
 
         List<Advertisement> advertisementList = new ArrayList<>();
-        for (String city: cityList){
+        for (String city : cityList) {
             advertisementList.addAll(advertisementRepository.findByPlace(city));
         }
         System.out.println(advertisementList.size());
