@@ -24,17 +24,12 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 import redis.clients.jedis.Jedis;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -125,7 +120,7 @@ public class AdvertisementAppTest {
             cityList.add(city.getName());
         }
 
-        for (long i = 0; i <= 100000; i++) {
+        for (long i = 0; i <= 1000000; i++) {
 
             r = new Random();
             randomValueLatitue = rangeMinLatitue + (rangeMaxLatitue - rangeMinLatitue) * r.nextDouble();
@@ -179,6 +174,7 @@ public class AdvertisementAppTest {
             advertisementDDBBList.addAll(advertisementRepository.findByPlace(city));
         }
         end = System.currentTimeMillis();
+        logger.warn("result found cassandra: " + advertisementDDBBList.size());
         logger.warn("time cassandra: " + (end - start));
 
         start = System.currentTimeMillis();
@@ -187,6 +183,7 @@ public class AdvertisementAppTest {
             advertisementCacheList.addAll(cacheService.getAdvertisementListCache(city));
         }
         end = System.currentTimeMillis();
+        logger.warn("result found redis: " + advertisementCacheList.size());
         logger.warn("time redis: " + (end - start));
 
 
