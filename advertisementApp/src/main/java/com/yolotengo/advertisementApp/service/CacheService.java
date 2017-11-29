@@ -18,15 +18,6 @@ public class CacheService {
     @Autowired
     private SerializationService serializationService;
 
-    public void putInCache(String key, Object obj) {
-        String objSerialice = serializationService.serializer(obj);
-        template.opsForValue().set(key, objSerialice);
-    }
-
-    public <T> T getFromCache(String key, Class<T> objClass) {
-        return serializationService.deserializer(template.opsForValue().get(key), objClass);
-    }
-
     public void putAdvertisementCache(Advertisement ad) {
         String adSerialice = serializationService.serializer(ad);
         Map<String, String> adMap = new HashMap<>();
