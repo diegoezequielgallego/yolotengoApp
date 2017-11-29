@@ -48,8 +48,15 @@ public class CacheService {
     }
 
     public List<String> getNearbyCityListCache(String ratioKey, String areaKey) {
-        String cityListString = template.opsForHash().entries(ratioKey).get(areaKey).toString();
+        String cityListString = template.opsForHash().entries("ratio-" + ratioKey).get(areaKey).toString();
         return serializationService.deserializer(cityListString, ArrayList.class);
     }
 
+    public void putNearbyCityListCache(List<String> cityList, String ratioKey, String areaLeveKey) {
+        String cityListSerialice = serializationService.serializer(cityList);
+        Map<String, String> cityMap = new HashMap<>();
+        cityMap.put(areaLeveKey, cityListSerialice);
+
+        template.opsForHash().putAll("ratio-" + ratioKey, cityMap);
+    }
 }

@@ -19,7 +19,7 @@ import com.yolotengo.advertisementApp.service.SerializationService;
 import com.yolotengo.commonLibApp.dto.AdvertisementDTO;
 import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
 import com.yolotengo.commonLibApp.dto.ItemDTO;
-import com.yolotengo.commonLibApp.dto.LocationDTO;
+import com.yolotengo.commonLibApp.dto.FilterDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -208,7 +208,7 @@ public class AdvertisementAppTest {
 
     @Test
     public void testGetNerbyAdvertisement() throws Exception {
-        LocationDTO location = new LocationDTO();
+        FilterDTO location = new FilterDTO();
         location.setLatitude(-34.687886);
         location.setLongitude(-58.529208);
         location.setRatio(5);

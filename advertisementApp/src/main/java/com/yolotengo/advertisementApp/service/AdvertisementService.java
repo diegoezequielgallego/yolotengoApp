@@ -4,7 +4,7 @@ import com.yolotengo.advertisementApp.model.Advertisement;
 import com.yolotengo.advertisementApp.repositories.AdvertisementRepository;
 import com.yolotengo.commonLibApp.dto.AdvertisementDTO;
 import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
-import com.yolotengo.commonLibApp.dto.LocationDTO;
+import com.yolotengo.commonLibApp.dto.FilterDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,14 +52,17 @@ public class AdvertisementService {
     }
 
 
-    public List<AdvertisementDTO> getNerbyAdvertisement(LocationDTO location) throws Exception {
-        AdvertisementDTO ad = new AdvertisementDTO();
+    public List<AdvertisementDTO> getNerbyAdvertisement(FilterDTO filter) throws Exception {
+        AdvertisementDTO ad;
+        List<String> cityList;
 
+        cityList = cacheService.getNearbyCityListCache(String.valueOf(filter.getRatio()), filter.getAreaLevel());
 
-        //cacheService.getNearbyCityListCache()
-
-        List<String> cityList = geoLocationService.getNearbyPlace(location.getLatitude(),
-                location.getLongitude(), location.getRatio());
+        if (cityList == null) {
+            cityList = geoLocationService.getNearbyPlace(filter.getLatitude(),
+                    filter.getLongitude(), filter.getRatio());
+            cacheService.putNearbyCityListCache(cityList, String.valueOf(filter.getRatio()), filter.getAreaLevel());
+        }
 
 
         return null;
