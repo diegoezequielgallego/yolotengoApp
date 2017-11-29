@@ -19,7 +19,6 @@ public class GeoLocationService {
         List<String> cityList = new ArrayList<>();
 
         WebService.setUserName("diegoezequielgallego");
-        //lat log radio & cant
         List<Toponym> geonamesList = WebService.findNearbyPlaceName(lat, lon, radius, Integer.MAX_VALUE);
 
         for (Toponym city : geonamesList) {

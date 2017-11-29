@@ -211,7 +211,7 @@ public class AdvertisementAppTest {
         LocationDTO location = new LocationDTO();
         location.setLatitude(-34.687886);
         location.setLongitude(-58.529208);
-        location.setRatio(5.0);
+        location.setRatio(5);
         List<AdvertisementDTO> AdvertisementList = advertisementService.getNerbyAdvertisement(location);
 
     }

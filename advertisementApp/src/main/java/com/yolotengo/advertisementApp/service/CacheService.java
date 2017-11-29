@@ -47,4 +47,9 @@ public class CacheService {
         return advertisementList;
     }
 
+    public List<String> getNearbyCityListCache(String ratioKey, String areaKey) {
+        String cityListString = template.opsForHash().entries(ratioKey).get(areaKey).toString();
+        return serializationService.deserializer(cityListString, ArrayList.class);
+    }
+
 }

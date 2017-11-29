@@ -6,9 +6,17 @@ package com.yolotengo.commonLibApp.dto;
 public class LocationDTO {
 
     private String areaLevel;
-    private double ratio;
+    private int ratio;
     private double latitude;
     private double longitude;
+
+    public int getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(int ratio) {
+        this.ratio = ratio;
+    }
 
     public String getAreaLevel() {
         return areaLevel;
@@ -16,14 +24,6 @@ public class LocationDTO {
 
     public void setAreaLevel(String areaLevel) {
         this.areaLevel = areaLevel;
-    }
-
-    public double getRatio() {
-        return ratio;
-    }
-
-    public void setRatio(double ratio) {
-        this.ratio = ratio;
     }
 
     public double getLatitude() {
