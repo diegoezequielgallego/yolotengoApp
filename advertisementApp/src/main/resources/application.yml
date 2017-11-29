@@ -1,9 +1,3 @@
-logging:
-  level:
-    ROOT: ERROR
-    org.springframework: OFF
-    com.datastax: ERROR
-
 server:
   port: 8091
   contextPath: /advertisementApp

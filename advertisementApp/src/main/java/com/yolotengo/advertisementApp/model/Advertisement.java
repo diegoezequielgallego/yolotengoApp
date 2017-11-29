@@ -19,13 +19,13 @@ public class Advertisement {
     @Column(value = "creationDate")
     private Date creationDate;
 
-    @Column(value = "areaLevel1")
+    @PrimaryKeyColumn(name = "areaLevel1",ordinal = 2,type = PrimaryKeyType.PARTITIONED)
     private String areaLevel1;
 
     @Column(value = "areaLevel2")
     private String areaLevel2;
 
-    @PrimaryKeyColumn(name = "userId",ordinal = 1,type = PrimaryKeyType.PARTITIONED)
+    @Column(value = "userId")
     private String userId;
 
     @Column(value = "itemJason")
@@ -37,11 +37,9 @@ public class Advertisement {
     @Column(value = "picture")
     private String picture;
 
-    //@PrimaryKeyColumn(name = "latitue",ordinal = 2,type = PrimaryKeyType.PARTITIONED)
     @Column(value = "latitue")
     private double latitue;
 
-    //@PrimaryKeyColumn(name = "longitude",ordinal = 3,type = PrimaryKeyType.PARTITIONED)
     @Column(value = "longitude")
     private double longitude;
 
