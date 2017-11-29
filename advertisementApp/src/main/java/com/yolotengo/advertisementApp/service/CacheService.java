@@ -6,8 +6,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Scope("singleton")
@@ -40,6 +39,17 @@ public class CacheService {
         String advertisementString = template.opsForHash().entries(areaKey).get(id).toString();
         Advertisement advertisement = serializationService.deserializer(advertisementString, Advertisement.class);
         return advertisement;
+    }
+
+    public List<Advertisement> getAdvertisementListCache(String areaKey) {
+        Advertisement advertisement;
+        List<Advertisement> advertisementList = new ArrayList<>();
+        Collection<Object> objectsList = template.opsForHash().entries(areaKey).values();
+        for (Object advertisementObj : objectsList) {
+            advertisement = serializationService.deserializer(advertisementObj.toString(), Advertisement.class);
+            advertisementList.add(advertisement);
+        }
+        return advertisementList;
     }
 
 }

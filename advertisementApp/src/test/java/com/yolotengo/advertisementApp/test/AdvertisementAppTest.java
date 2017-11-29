@@ -31,6 +31,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
+import redis.clients.jedis.Jedis;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -90,12 +91,29 @@ public class AdvertisementAppTest {
         Session session = cluster.connect();
         Batch batch = QueryBuilder.unloggedBatch();
 
+        //Clear All Data
+        advertisementRepository.deleteAll();
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.flushAll();
+
+
         double rangeMinLatitue = -34.453143;
         double rangeMaxLatitue = -34.788205;
         double rangeMinLongitude = -58.215195;
         double rangeMaxLongitude = -58.695443;
         double randomValueLatitue;
         double randomValueLongitude;
+
+        Advertisement ad = new Advertisement();
+        ad.setUserId("rambo");
+        ad.setCategoryId("servicios");
+        List itemList = new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete")));
+        ad.setItemJason(serializationService.serializer(itemList));
+        ad.setPicture("/picture");
+        ad.setCreationDate(new Date());
+        ad.setAreaLevel2("La Matanza");
+        ad.setRighNow(true);
+        ad.setDelivery(true);
 
 
         WebService.setUserName("diegoezequielgallego");
@@ -107,10 +125,7 @@ public class AdvertisementAppTest {
             cityList.add(city.getName());
         }
 
-        advertisementRepository.deleteAll();
-        String items = serializationService.serializer(new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete"))));
-
-        for (long i = 0; i < 10000; i++) {
+        for (long i = 0; i <= 100000; i++) {
 
             r = new Random();
             randomValueLatitue = rangeMinLatitue + (rangeMaxLatitue - rangeMinLatitue) * r.nextDouble();
@@ -119,14 +134,16 @@ public class AdvertisementAppTest {
 
             int randomCity = 0 + (int) (Math.random() * cityList.size());
 
+            UUID id = UUIDs.timeBased();
+
             RegularStatement insert = QueryBuilder.insertInto("advertisement_keyspace", "advertisement").values(
                     new String[]{"id", "creationDate", "areaLevel1", "areaLevel2", "userId", "itemJason"
                             , "categoryId", "picture", "latitue", "longitude", "righNow", "delivery"},
-                    new Object[]{UUIDs.timeBased(), new Date(), cityList.get(randomCity), "La Matanza"
-                            , "Rambo", items, "servicios", "/picture", randomValueLatitue, randomValueLongitude, true, true});
+                    new Object[]{id, new Date(), cityList.get(randomCity), "La Matanza"
+                            , "Rambo", serializationService.serializer(itemList), "servicios", "/picture",
+                            randomValueLatitue, randomValueLongitude, true, true});
             insert.setConsistencyLevel(ConsistencyLevel.ONE);
             batch.add(insert);
-
 
             if (i % 100 == 0) {
                 session.execute(batch);
@@ -134,6 +151,12 @@ public class AdvertisementAppTest {
                 logger.warn("create advertisement number:" + i);
             }
 
+            ad.setId(id);
+            ad.setAreaLevel1(cityList.get(randomCity));
+            ad.setLatitue(randomValueLatitue);
+            ad.setLongitude(randomValueLongitude);
+
+            cacheService.putAdvertisementCache(ad);
         }
 
     }
@@ -147,13 +170,27 @@ public class AdvertisementAppTest {
         cityList.add("Ramos Mejía");
         cityList.add("Mataderos");
         cityList.add("Aldo Bonzi");
+        Long start;
+        Long end;
 
-        List<Advertisement> advertisementList = new ArrayList<>();
+        start = System.currentTimeMillis();
+        List<Advertisement> advertisementDDBBList = new ArrayList<>();
         for (String city : cityList) {
-            advertisementList.addAll(advertisementRepository.findByPlace(city));
+            advertisementDDBBList.addAll(advertisementRepository.findByPlace(city));
         }
-        System.out.println(advertisementList.size());
+        end = System.currentTimeMillis();
+        logger.warn("time cassandra: " + (end - start));
 
+        start = System.currentTimeMillis();
+        List<Advertisement> advertisementCacheList = new ArrayList<>();
+        for (String city : cityList) {
+            advertisementCacheList.addAll(cacheService.getAdvertisementListCache(city));
+        }
+        end = System.currentTimeMillis();
+        logger.warn("time redis: " + (end - start));
+
+
+        Assert.isTrue(advertisementCacheList.size() == advertisementDDBBList.size(), "");
     }
 
 }
