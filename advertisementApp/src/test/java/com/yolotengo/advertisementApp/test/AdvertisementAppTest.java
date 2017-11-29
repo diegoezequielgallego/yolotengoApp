@@ -64,7 +64,7 @@ public class AdvertisementAppTest {
         Advertisement ad = advertisementService.creationAdvertisement(adrDTO);
         String advertisementId = ad.getId().toString();
         advertisementRepository.delete(ad);
-        Assert.isTrue(advertisementId != null);
+        Assert.notNull(advertisementId, "");
 
     }
 
@@ -124,10 +124,6 @@ public class AdvertisementAppTest {
 
         }
 
-
-        //Long countAdvertisement = advertisementRepository.count();
-        //System.out.println(countAdvertisement);
-        //Assert.isTrue(countAdvertisement.equals(1000000L));
     }
 
 
@@ -140,8 +136,11 @@ public class AdvertisementAppTest {
         cityList.add("Mataderos");
         cityList.add("Aldo Bonzi");
 
-        List<Advertisement> list = advertisementRepository.findByPlace(cityList);
-        System.out.println(list.size());
+        List<Advertisement> advertisementList = new ArrayList<>();
+        for (String city: cityList){
+            advertisementList.addAll(advertisementRepository.findByPlace(city));
+        }
+        System.out.println(advertisementList.size());
 
     }
 

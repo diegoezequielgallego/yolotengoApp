@@ -16,7 +16,7 @@ public interface AdvertisementRepository extends CassandraRepository<Advertiseme
     List<Advertisement> findByUser(String userId, Integer limit);
 
 
-    @Query("SELECT * FROM advertisement WHERE areaLevel1 IN (?0)")
-    List<Advertisement> findByPlace(List<String> areaLevel);
+    @Query("SELECT * FROM advertisement WHERE areaLevel1 =?0")
+    List<Advertisement> findByPlace(String areaLevel);
 
 }

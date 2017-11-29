@@ -80,7 +80,7 @@ public class AdvertisementService {
         ad.setLongitude(adrDTO.getLongitude());
         ad.setRighNow(adrDTO.isRighNow());
         ad.setDelivery(adrDTO.isDelivery());
-        ad = (Advertisement) advertisementRepository.save(ad);
+        ad = advertisementRepository.save(ad);
 
         //cacheService.putInCache(String.valueOf(ad.getId().getLeastSignificantBits()), ad);
         return ad;
