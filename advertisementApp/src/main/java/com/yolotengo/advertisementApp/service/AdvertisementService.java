@@ -52,9 +52,10 @@ public class AdvertisementService {
     }
 
 
-    public List<AdvertisementDTO> getNerbyAdvertisement(LocationDTO location) {
+    public List<AdvertisementDTO> getNerbyAdvertisement(LocationDTO location) throws Exception {
         AdvertisementDTO ad = new AdvertisementDTO();
 
+        List<String> cityList = geoLocationService.getNearbyPlace(-34.687886, -58.529208, 30.0);
 
         return null;
     }

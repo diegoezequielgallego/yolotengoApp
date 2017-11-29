@@ -16,9 +16,10 @@ import com.yolotengo.advertisementApp.service.AdvertisementService;
 import com.yolotengo.advertisementApp.service.CacheService;
 import com.yolotengo.advertisementApp.service.GeoLocationService;
 import com.yolotengo.advertisementApp.service.SerializationService;
+import com.yolotengo.commonLibApp.dto.AdvertisementDTO;
 import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
 import com.yolotengo.commonLibApp.dto.ItemDTO;
-import org.geonames.Toponym;
+import com.yolotengo.commonLibApp.dto.LocationDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -121,12 +122,7 @@ public class AdvertisementAppTest {
 
 
         //lat log radio y cant
-        List<Toponym> geoList = geoLocationService.getNearbyPlace(-34.687886, -58.529208, 30.0, 500);
-        List<String> cityList = new ArrayList<>();
-
-        for (Toponym city : geoList) {
-            cityList.add(city.getName());
-        }
+        List<String> cityList = geoLocationService.getNearbyPlace(-34.687886, -58.529208, 30.0);
 
         for (long i = 0; i <= 10000; i++) {
 
@@ -207,6 +203,16 @@ public class AdvertisementAppTest {
         Double distance = geoLocationService.calculateDistance(homeLat, uncleLat, homeLon, uncleLon);
         logger.warn("distance Diego s home to Uncle: " + distance);
         Assert.isTrue(distance.compareTo(new Double("300")) == -1, "");
+
+    }
+
+    @Test
+    public void testGetNerbyAdvertisement() throws Exception {
+        LocationDTO location = new LocationDTO();
+        location.setLatitude(-34.687886);
+        location.setLongitude(-58.529208);
+        location.setRatio(5.0);
+        List<AdvertisementDTO> AdvertisementList = advertisementService.getNerbyAdvertisement(location);
 
     }
 

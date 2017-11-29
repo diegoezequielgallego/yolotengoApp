@@ -5,6 +5,7 @@ import org.geonames.WebService;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,11 +15,18 @@ import java.util.List;
 @Scope("singleton")
 public class GeoLocationService {
 
-    public List<Toponym> getNearbyPlace(double lat, double lon, double radius, int result) throws Exception {
+    public List<String> getNearbyPlace(double lat, double lon, double radius) throws Exception {
+        List<String> cityList = new ArrayList<>();
+
         WebService.setUserName("diegoezequielgallego");
         //lat log radio & cant
-        List<Toponym> geonamesList = WebService.findNearbyPlaceName(-34.687886, -58.529208, 30.0, 500);
-        return geonamesList;
+        List<Toponym> geonamesList = WebService.findNearbyPlaceName(lat, lon, radius, Integer.MAX_VALUE);
+
+        for (Toponym city : geonamesList) {
+            cityList.add(city.getName());
+        }
+
+        return cityList;
     }
 
 
