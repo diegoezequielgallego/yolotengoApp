@@ -15,6 +15,7 @@ import com.yolotengo.advertisementApp.repositories.AdvertisementRepository;
 import com.yolotengo.advertisementApp.service.AdvertisementService;
 import com.yolotengo.advertisementApp.service.CacheService;
 import com.yolotengo.advertisementApp.service.SerializationService;
+import com.yolotengo.advertisementApp.util.Until;
 import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
 import com.yolotengo.commonLibApp.dto.ItemDTO;
 import org.geonames.Toponym;
@@ -70,11 +71,17 @@ public class AdvertisementAppTest {
         String advertisementId = ad.getId().toString();
         String advertisementArea = ad.getAreaLevel1();
 
-        advertisementRepository.delete(ad);
         Assert.notNull(advertisementId, "");
 
         ad = cacheService.getAdvertisementCache(advertisementArea, advertisementId);
         Assert.notNull(ad, "");
+
+        advertisementRepository.delete(ad);
+        cacheService.removeAdvertisementCache(advertisementArea, advertisementId);
+
+        ad = cacheService.getAdvertisementCache(advertisementArea, advertisementId);
+        Assert.isTrue(ad == null, "");
+
     }
 
 
@@ -158,7 +165,7 @@ public class AdvertisementAppTest {
 
 
     @Test
-    public void testQueryBulkCreationAdvertisement() {
+    public void testConsistenceCassandraAndRedis() {
         List<String> cityList = new ArrayList<>();
         cityList.add("Tapiales");
         cityList.add("Tablada");
@@ -189,5 +196,19 @@ public class AdvertisementAppTest {
 
         Assert.isTrue(advertisementCacheList.size() == advertisementDDBBList.size(), "");
     }
+
+    @Test
+    public void testDistanceCalculator() {
+        Double homeLat = -34.686872;
+        Double homeLon = -58.530553;
+        Double uncleLat = -34.688277;
+        Double uncleLon = -58.528735;
+
+        Double distance = Until.calculateDistance(homeLat, uncleLat, homeLon, uncleLon);
+        logger.warn("distance Diego s home to Uncle: " + distance);
+        Assert.isTrue(distance.compareTo(new Double("300")) == -1, "");
+
+    }
+
 
 }

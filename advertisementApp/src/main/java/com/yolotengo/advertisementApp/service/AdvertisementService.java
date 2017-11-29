@@ -3,7 +3,6 @@ package com.yolotengo.advertisementApp.service;
 import com.google.gson.Gson;
 import com.yolotengo.advertisementApp.model.Advertisement;
 import com.yolotengo.advertisementApp.repositories.AdvertisementRepository;
-import com.yolotengo.commonLibApp.dto.AdvertisementDTO;
 import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
 import com.yolotengo.commonLibApp.dto.ItemDTO;
 import org.geonames.Toponym;
@@ -43,9 +42,6 @@ public class AdvertisementService {
         ad.setLongitude(-58.529208);
 
         advertisementRepository.save(ad);
-        List<Advertisement> listAdvertisement = advertisementRepository.findByUser("Rambo", 1);
-
-        cacheService.putInCache(ad.getUserId(), listAdvertisement.get(0));
         Advertisement adDeserialice = cacheService.getFromCache("Rambo", Advertisement.class);
 
         System.out.println("Found key Rambo, value=" + adDeserialice.getUserId());

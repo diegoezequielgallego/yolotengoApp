@@ -41,6 +41,10 @@ public class CacheService {
         return advertisement;
     }
 
+    public void removeAdvertisementCache(String areaKey, String id) {
+        template.opsForHash().entries(areaKey).remove(id);
+    }
+
     public List<Advertisement> getAdvertisementListCache(String areaKey) {
         Advertisement advertisement;
         List<Advertisement> advertisementList = new ArrayList<>();
