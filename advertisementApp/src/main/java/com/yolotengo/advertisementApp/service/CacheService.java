@@ -27,13 +27,15 @@ public class CacheService {
     }
 
     public Advertisement getAdvertisementCache(String areaKey, String id) {
-        String advertisementString = template.opsForHash().entries(areaKey).get(id).toString();
+        Object adObj = template.opsForHash().entries(areaKey).get(id);
+        if (adObj == null) return null;
+        String advertisementString = adObj.toString();
         Advertisement advertisement = serializationService.deserializer(advertisementString, Advertisement.class);
         return advertisement;
     }
 
     public void removeAdvertisementCache(String areaKey, String id) {
-        template.opsForHash().entries(areaKey).remove(id);
+        template.opsForHash().delete(areaKey, id);
     }
 
     public void removeNearbyPlaceCache(String primaryKey) {
@@ -52,17 +54,17 @@ public class CacheService {
     }
 
     public List<String> getNearbyCityListCache(String ratioKey, String areaKey) {
-        Object cityObj = template.opsForHash().entries("ratio-" + ratioKey+"km").get(areaKey);
+        Object cityObj = template.opsForHash().entries("ratio-" + ratioKey + "km").get(areaKey);
         if (cityObj == null) return null;
         String cityListString = cityObj.toString();
         return serializationService.deserializer(cityListString, ArrayList.class);
     }
 
-    public void putNearbyCityListCache(List<String> cityList, String ratioKey, String areaLeveKey) {
+    public void putNearbyCityListCache(String ratioKey, String areaLeveKey, List<String> cityList) {
         String cityListSerialice = serializationService.serializer(cityList);
         Map<String, String> cityMap = new HashMap<>();
         cityMap.put(areaLeveKey, cityListSerialice);
 
-        template.opsForHash().putAll("ratio-"+ratioKey+"km", cityMap);
+        template.opsForHash().putAll("ratio-" + ratioKey + "km", cityMap);
     }
 }

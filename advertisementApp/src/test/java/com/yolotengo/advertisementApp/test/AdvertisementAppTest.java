@@ -18,8 +18,8 @@ import com.yolotengo.advertisementApp.service.GeoLocationService;
 import com.yolotengo.advertisementApp.service.SerializationService;
 import com.yolotengo.commonLibApp.dto.AdvertisementDTO;
 import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
-import com.yolotengo.commonLibApp.dto.ItemDTO;
 import com.yolotengo.commonLibApp.dto.FilterDTO;
+import com.yolotengo.commonLibApp.dto.ItemDTO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -79,8 +79,7 @@ public class AdvertisementAppTest {
         ad = cacheService.getAdvertisementCache(advertisementArea, advertisementId);
         Assert.notNull(ad, "");
 
-        advertisementRepository.delete(ad);
-        cacheService.removeAdvertisementCache(advertisementArea, advertisementId);
+        advertisementService.removeAdvertisement(ad);
 
         ad = cacheService.getAdvertisementCache(advertisementArea, advertisementId);
         Assert.isTrue(ad == null, "");
@@ -111,14 +110,11 @@ public class AdvertisementAppTest {
 
         Advertisement ad = new Advertisement();
         ad.setUserId("rambo");
-        ad.setCategoryId("servicios");
         List itemList = new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete")));
         ad.setItemJason(serializationService.serializer(itemList));
         ad.setPicture("/picture");
         ad.setCreationDate(new Date());
         ad.setAreaLevel2("La Matanza");
-        ad.setRighNow(true);
-        ad.setDelivery(true);
 
 
         //lat log radio y cant
@@ -135,12 +131,20 @@ public class AdvertisementAppTest {
 
             UUID id = UUIDs.timeBased();
 
+            ad.setCategoryId(i % 2 == 0 ? "1-products" : "2-service");
+            ad.setRighNow(true);
+            ad.setDelivery(true);
+            ad.setId(id);
+            ad.setAreaLevel1(cityList.get(randomCity));
+            ad.setLatitue(randomValueLatitue);
+            ad.setLongitude(randomValueLongitude);
+
             RegularStatement insert = QueryBuilder.insertInto("advertisement_keyspace", "advertisement").values(
                     new String[]{"id", "creationDate", "areaLevel1", "areaLevel2", "userId", "itemJason"
                             , "categoryId", "picture", "latitue", "longitude", "righNow", "delivery"},
-                    new Object[]{id, new Date(), cityList.get(randomCity), "La Matanza"
-                            , "Rambo", serializationService.serializer(itemList), "servicios", "/picture",
-                            randomValueLatitue, randomValueLongitude, true, true});
+                    new Object[]{id, new Date(), ad.getAreaLevel1(), "La Matanza"
+                            , "Rambo", ad.getItemJason(), ad.getCategoryId(), "/picture",
+                            randomValueLatitue, randomValueLongitude, ad.isRighNow(), ad.isDelivery()});
             insert.setConsistencyLevel(ConsistencyLevel.ONE);
             batch.add(insert);
 
@@ -150,10 +154,6 @@ public class AdvertisementAppTest {
                 logger.warn("create advertisement number:" + i);
             }
 
-            ad.setId(id);
-            ad.setAreaLevel1(cityList.get(randomCity));
-            ad.setLatitue(randomValueLatitue);
-            ad.setLongitude(randomValueLongitude);
 
             cacheService.putAdvertisementCache(ad);
         }
@@ -201,7 +201,7 @@ public class AdvertisementAppTest {
         Double uncleLon = -58.528735;
 
         Double distance = geoLocationService.calculateDistance(homeLat, uncleLat, homeLon, uncleLon);
-        logger.warn("distance Diego s home to Uncle: " + distance);
+        logger.warn("distance Diegos home to Uncle: " + distance);
         Assert.isTrue(distance.compareTo(new Double("300")) == -1, "");
 
     }
@@ -209,8 +209,8 @@ public class AdvertisementAppTest {
     @Test
     public void testGetNerbyAdvertisement() throws Exception {
         AdvertisementRequestDTO adrDTO = new AdvertisementRequestDTO();
-        adrDTO.setUserId("rambo");
-        adrDTO.setCategoryId("servicios");
+        adrDTO.setUserId("rambo2");
+        adrDTO.setCategoryId("1-products");
         adrDTO.setItems(new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete"))));
         adrDTO.setPicture("/picture");
         adrDTO.setCreationDate(new Date());
@@ -227,30 +227,22 @@ public class AdvertisementAppTest {
         filter.setLatitude(-34.687886);
         filter.setLongitude(-58.529208);
         filter.setRatio(5);
+        filter.setCategoryID("1-products");
         filter.setAreaLevel("Tablada");
+        filter.setRighNow(true);
+        filter.setDelivery(true);
+
+        Long start;
+        Long end;
+
+        start = System.currentTimeMillis();
         List<AdvertisementDTO> advertisementList = advertisementService.getNerbyAdvertisement(filter);
+        end = System.currentTimeMillis();
+        logger.warn("result found: " + advertisementList.size());
+        logger.warn("time for result: " + (end - start));
 
         Assert.isTrue(!advertisementList.isEmpty(), "");
-
-
-        int matchCount = 0;
-        List<String> cityList = cacheService.getNearbyCityListCache(String.valueOf(filter.getRatio()), filter.getAreaLevel());
-        List<Advertisement> advertisementDDBBList;
-        for (String city : cityList) {
-            advertisementDDBBList = advertisementRepository.findByPlace(city);
-            for(Advertisement adDDBB : advertisementDDBBList){
-                Double distance = geoLocationService.calculateDistance(adDDBB.getLatitue(),
-                        filter.getLatitude(),adDDBB.getLongitude(), filter.getLongitude());
-                if (distance.compareTo(new Double(filter.getRatio()*1000)) == -1){
-                    matchCount++;
-                }
-            }
-        }
-
-        System.out.println(matchCount);
-        System.out.println(advertisementList.size());
-        logger.warn("match distance:" + matchCount);
-        Assert.isTrue(advertisementList.size() == matchCount, "");
+        advertisementService.removeAdvertisement(ad);
     }
 
 
@@ -266,8 +258,7 @@ public class AdvertisementAppTest {
         String ratioKey = "0";
         String arealevelKey = "Tablada";
 
-        cacheService.removeNearbyPlaceCache(ratioKey);
-        cacheService.putNearbyCityListCache(cityList, ratioKey, arealevelKey);
+        cacheService.putNearbyCityListCache(ratioKey, arealevelKey, cityList);
         cityList = cacheService.getNearbyCityListCache(ratioKey, arealevelKey);
 
         Assert.isTrue(cityList.contains("Tablada") , "");
@@ -275,9 +266,6 @@ public class AdvertisementAppTest {
         cacheService.removeNearbyPlaceCache(ratioKey);
         cityList = cacheService.getNearbyCityListCache(ratioKey, arealevelKey);
         Assert.isTrue(cityList == null , "");
-
-
-
     }
 
 }

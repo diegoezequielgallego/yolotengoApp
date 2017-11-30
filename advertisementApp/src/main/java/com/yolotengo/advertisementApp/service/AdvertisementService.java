@@ -54,6 +54,11 @@ public class AdvertisementService {
     }
 
 
+    public void removeAdvertisement(Advertisement ad) {
+        advertisementRepository.delete(ad);
+        cacheService.removeAdvertisementCache(ad.getAreaLevel1(), ad.getId().toString());
+    }
+
     public List<AdvertisementDTO> getNerbyAdvertisement(FilterDTO filter) throws Exception {
         AdvertisementDTO adDTO;
         List<AdvertisementDTO> adDTOList;
@@ -62,21 +67,31 @@ public class AdvertisementService {
         cityList = cacheService.getNearbyCityListCache(String.valueOf(filter.getRatio()), filter.getAreaLevel());
 
         if (cityList == null) {
-            logger.warn("no found in cache key: " + filter.getRatio() + " subkey: " +filter.getAreaLevel());
+            logger.warn("no found in cache key: " + filter.getRatio() + " subkey: " + filter.getAreaLevel());
             cityList = geoLocationService.getNearbyPlace(filter.getLatitude(),
                     filter.getLongitude(), filter.getRatio());
-            cacheService.putNearbyCityListCache(cityList, String.valueOf(filter.getRatio()), filter.getAreaLevel());
+            cacheService.putNearbyCityListCache(String.valueOf(filter.getRatio()), filter.getAreaLevel(), cityList);
         }
 
         adDTOList = new ArrayList<>();
         List<Advertisement> advertisementCacheList;
         for (String city : cityList) {
             advertisementCacheList = cacheService.getAdvertisementListCache(city);
-            for (Advertisement advertisement: advertisementCacheList){
+            for (Advertisement advertisement : advertisementCacheList) {
+
+                if (advertisement.isRighNow() != filter.isRighNow()) {
+                    continue;
+                }
+                if (advertisement.isDelivery() != filter.isDelivery()) {
+                    continue;
+                }
+                if (!advertisement.getCategoryId().equals(filter.getCategoryID())) {
+                    continue;
+                }
                 Double distance = geoLocationService.calculateDistance(filter.getLatitude(),
                         advertisement.getLatitue(), filter.getLongitude(), advertisement.getLongitude());
 
-                if (distance.compareTo(new Double(filter.getRatio()*1000)) == -1){
+                if (distance.compareTo(new Double(filter.getRatio() * 1000)) == -1) {
                     adDTO = new AdvertisementDTO();
                     adDTO.setId(advertisement.getId().toString());
                     adDTO.setCreationDate(advertisement.getCreationDate());

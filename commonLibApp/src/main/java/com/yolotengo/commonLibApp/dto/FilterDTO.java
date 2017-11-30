@@ -11,6 +11,15 @@ public class FilterDTO {
     private double longitude;
     private boolean righNow;
     private boolean delivery;
+    private String categoryID;
+
+    public String getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(String categoryID) {
+        this.categoryID = categoryID;
+    }
 
     public boolean isRighNow() {
         return righNow;
