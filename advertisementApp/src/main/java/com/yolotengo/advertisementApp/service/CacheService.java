@@ -37,7 +37,7 @@ public class CacheService {
     }
 
     public void removeNearbyPlaceCache(String primaryKey) {
-        template.delete("ratio-" + primaryKey);
+        template.delete("ratio-" + primaryKey + "km");
     }
 
     public List<Advertisement> getAdvertisementListCache(String areaKey) {
