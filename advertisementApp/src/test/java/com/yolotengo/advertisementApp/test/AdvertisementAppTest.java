@@ -124,7 +124,7 @@ public class AdvertisementAppTest {
         //lat log radio y cant
         List<String> cityList = geoLocationService.getNearbyPlace(-34.687886, -58.529208, 30.0);
 
-        for (long i = 0; i <= 10000; i++) {
+        for (long i = 0; i <= 1000000; i++) {
 
             r = new Random();
             randomValueLatitue = rangeMinLatitue + (rangeMaxLatitue - rangeMinLatitue) * r.nextDouble();
@@ -208,13 +208,76 @@ public class AdvertisementAppTest {
 
     @Test
     public void testGetNerbyAdvertisement() throws Exception {
-        FilterDTO location = new FilterDTO();
-        location.setLatitude(-34.687886);
-        location.setLongitude(-58.529208);
-        location.setRatio(5);
-        List<AdvertisementDTO> AdvertisementList = advertisementService.getNerbyAdvertisement(location);
+        AdvertisementRequestDTO adrDTO = new AdvertisementRequestDTO();
+        adrDTO.setUserId("rambo");
+        adrDTO.setCategoryId("servicios");
+        adrDTO.setItems(new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete"))));
+        adrDTO.setPicture("/picture");
+        adrDTO.setCreationDate(new Date());
+        adrDTO.setAreaLevel1("Tablada");
+        adrDTO.setAreaLevel2("La Matanza");
+        adrDTO.setLatitude(-34.687856);
+        adrDTO.setLongitude(-58.529288);
+        adrDTO.setRighNow(true);
+        adrDTO.setDelivery(true);
 
+        Advertisement ad = advertisementService.creationAdvertisement(adrDTO);
+
+        FilterDTO filter = new FilterDTO();
+        filter.setLatitude(-34.687886);
+        filter.setLongitude(-58.529208);
+        filter.setRatio(5);
+        filter.setAreaLevel("Tablada");
+        List<AdvertisementDTO> advertisementList = advertisementService.getNerbyAdvertisement(filter);
+
+        Assert.isTrue(!advertisementList.isEmpty(), "");
+
+
+        int matchCount = 0;
+        List<String> cityList = cacheService.getNearbyCityListCache(String.valueOf(filter.getRatio()), filter.getAreaLevel());
+        List<Advertisement> advertisementDDBBList;
+        for (String city : cityList) {
+            advertisementDDBBList = advertisementRepository.findByPlace(city);
+            for(Advertisement adDDBB : advertisementDDBBList){
+                Double distance = geoLocationService.calculateDistance(adDDBB.getLatitue(),
+                        filter.getLatitude(),adDDBB.getLongitude(), filter.getLongitude());
+                if (distance.compareTo(new Double(filter.getRatio()*1000)) == -1){
+                    matchCount++;
+                }
+            }
+        }
+
+        System.out.println(matchCount);
+        System.out.println(advertisementList.size());
+        logger.warn("match distance:" + matchCount);
+        Assert.isTrue(advertisementList.size() == matchCount, "");
     }
 
+
+    @Test
+    public void testCacheNerbyPlace() throws Exception {
+        List<String> cityList = new ArrayList<>();
+        cityList.add("Tapiales");
+        cityList.add("Tablada");
+        cityList.add("Ramos Mejía");
+        cityList.add("Mataderos");
+        cityList.add("Aldo Bonzi");
+
+        String ratioKey = "0";
+        String arealevelKey = "Tablada";
+
+        cacheService.removeNearbyPlaceCache(ratioKey);
+        cacheService.putNearbyCityListCache(cityList, ratioKey, arealevelKey);
+        cityList = cacheService.getNearbyCityListCache(ratioKey, arealevelKey);
+
+        Assert.isTrue(cityList.contains("Tablada") , "");
+
+        cacheService.removeNearbyPlaceCache(ratioKey);
+        cityList = cacheService.getNearbyCityListCache(ratioKey, arealevelKey);
+        Assert.isTrue(cityList == null , "");
+
+
+
+    }
 
 }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -48,23 +49,50 @@ public class AdvertisementService {
         ad = advertisementRepository.save(ad);
 
         cacheService.putAdvertisementCache(ad);
+        logger.warn("create new Advertisement, id:" + ad.getId());
         return ad;
     }
 
 
     public List<AdvertisementDTO> getNerbyAdvertisement(FilterDTO filter) throws Exception {
-        AdvertisementDTO ad;
+        AdvertisementDTO adDTO;
+        List<AdvertisementDTO> adDTOList;
         List<String> cityList;
 
         cityList = cacheService.getNearbyCityListCache(String.valueOf(filter.getRatio()), filter.getAreaLevel());
 
         if (cityList == null) {
+            logger.warn("no found in cache key: " + filter.getRatio() + " subkey: " +filter.getAreaLevel());
             cityList = geoLocationService.getNearbyPlace(filter.getLatitude(),
                     filter.getLongitude(), filter.getRatio());
             cacheService.putNearbyCityListCache(cityList, String.valueOf(filter.getRatio()), filter.getAreaLevel());
         }
 
+        adDTOList = new ArrayList<>();
+        List<Advertisement> advertisementCacheList;
+        for (String city : cityList) {
+            advertisementCacheList = cacheService.getAdvertisementListCache(city);
+            for (Advertisement advertisement: advertisementCacheList){
+                Double distance = geoLocationService.calculateDistance(filter.getLatitude(),
+                        advertisement.getLatitue(), filter.getLongitude(), advertisement.getLongitude());
 
-        return null;
+                if (distance.compareTo(new Double(filter.getRatio()*1000)) == -1){
+                    adDTO = new AdvertisementDTO();
+                    adDTO.setId(advertisement.getId().toString());
+                    adDTO.setCreationDate(advertisement.getCreationDate());
+                    adDTO.setAreaLevel1(advertisement.getAreaLevel1());
+                    adDTO.setUserId(advertisement.getUserId());
+                    adDTO.setItems(serializationService.deserializer(advertisement.getItemJason(), ArrayList.class));
+                    adDTO.setCategoryId(advertisement.getCategoryId());
+                    adDTO.setDistance(distance);
+                    adDTO.setPicture(advertisement.getPicture());
+                    adDTO.setDelivery(advertisement.isDelivery());
+                    adDTO.setRighNow(advertisement.isRighNow());
+                    adDTOList.add(adDTO);
+                }
+            }
+        }
+
+        return adDTOList;
     }
 }

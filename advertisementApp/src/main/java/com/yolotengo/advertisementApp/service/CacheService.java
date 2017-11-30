@@ -36,6 +36,10 @@ public class CacheService {
         template.opsForHash().entries(areaKey).remove(id);
     }
 
+    public void removeNearbyPlaceCache(String primaryKey) {
+        template.delete("ratio-" + primaryKey);
+    }
+
     public List<Advertisement> getAdvertisementListCache(String areaKey) {
         Advertisement advertisement;
         List<Advertisement> advertisementList = new ArrayList<>();
@@ -48,7 +52,9 @@ public class CacheService {
     }
 
     public List<String> getNearbyCityListCache(String ratioKey, String areaKey) {
-        String cityListString = template.opsForHash().entries("ratio-" + ratioKey).get(areaKey).toString();
+        Object cityObj = template.opsForHash().entries("ratio-" + ratioKey+"km").get(areaKey);
+        if (cityObj == null) return null;
+        String cityListString = cityObj.toString();
         return serializationService.deserializer(cityListString, ArrayList.class);
     }
 
@@ -57,6 +63,6 @@ public class CacheService {
         Map<String, String> cityMap = new HashMap<>();
         cityMap.put(areaLeveKey, cityListSerialice);
 
-        template.opsForHash().putAll("ratio-" + ratioKey, cityMap);
+        template.opsForHash().putAll("ratio-"+ratioKey+"km", cityMap);
     }
 }
