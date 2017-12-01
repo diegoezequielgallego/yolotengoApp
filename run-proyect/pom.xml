@@ -19,6 +19,7 @@
     <!-- MODULES -->
     <modules>
         <module>../advertisementApp</module>
+        <module>../offerApp</module>
         <module>../commonLibApp</module>
         <module>../integrationApp</module>
     </modules>

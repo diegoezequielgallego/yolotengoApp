@@ -116,7 +116,6 @@ public class AdvertisementAppTest {
         ad.setCreationDate(new Date());
         ad.setAreaLevel2("La Matanza");
 
-
         //lat log radio y cant
         List<String> cityList = geoLocationService.getNearbyPlace(-34.687886, -58.529208, 30.0);
 
@@ -224,8 +223,8 @@ public class AdvertisementAppTest {
         Advertisement ad = advertisementService.creationAdvertisement(adrDTO);
 
         FilterDTO filter = new FilterDTO();
-        filter.setLatitude(-34.687886);
-        filter.setLongitude(-58.529208);
+        filter.setLatitude(-34.687880);
+        filter.setLongitude(-58.529207);
         filter.setRatio(5);
         filter.setCategoryID("1-products");
         filter.setAreaLevel("Tablada");
