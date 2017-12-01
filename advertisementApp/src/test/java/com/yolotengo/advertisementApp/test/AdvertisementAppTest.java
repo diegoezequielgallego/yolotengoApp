@@ -17,7 +17,6 @@ import com.yolotengo.advertisementApp.service.CacheService;
 import com.yolotengo.advertisementApp.service.GeoLocationService;
 import com.yolotengo.advertisementApp.service.SerializationService;
 import com.yolotengo.commonLibApp.dto.AdvertisementDTO;
-import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
 import com.yolotengo.commonLibApp.dto.FilterDTO;
 import com.yolotengo.commonLibApp.dto.ItemDTO;
 import org.junit.Test;
@@ -56,20 +55,20 @@ public class AdvertisementAppTest {
 
     @Test
     public void testCreationAdvertisement() {
-        AdvertisementRequestDTO adrDTO = new AdvertisementRequestDTO();
-        adrDTO.setUserId("rambo");
-        adrDTO.setCategoryId("servicios");
-        adrDTO.setItems(new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete"))));
-        adrDTO.setPicture("/picture");
-        adrDTO.setCreationDate(new Date());
-        adrDTO.setAreaLevel1("Tablada");
-        adrDTO.setAreaLevel2("La Matanza");
-        adrDTO.setLatitude(-34.687886);
-        adrDTO.setLongitude(-58.529208);
-        adrDTO.setRighNow(true);
-        adrDTO.setDelivery(true);
+        AdvertisementDTO adDTO = new AdvertisementDTO();
+        adDTO.setUserId("rambo");
+        adDTO.setCategoryId("servicios");
+        adDTO.setItems(new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete"))));
+        adDTO.setPicture("/picture");
+        adDTO.setCreationDate(new Date());
+        adDTO.setAreaLevel1("Tablada");
+        adDTO.setAreaLevel2("La Matanza");
+        adDTO.setLatitude(-34.687886);
+        adDTO.setLongitude(-58.529208);
+        adDTO.setRighNow(true);
+        adDTO.setDelivery(true);
 
-        Advertisement ad = advertisementService.creationAdvertisement(adrDTO);
+        Advertisement ad = advertisementService.creationAdvertisement(adDTO);
 
         String advertisementId = ad.getId().toString();
         String advertisementArea = ad.getAreaLevel1();
@@ -207,20 +206,20 @@ public class AdvertisementAppTest {
 
     @Test
     public void testGetNerbyAdvertisement() throws Exception {
-        AdvertisementRequestDTO adrDTO = new AdvertisementRequestDTO();
-        adrDTO.setUserId("rambo2");
-        adrDTO.setCategoryId("1-products");
-        adrDTO.setItems(new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete"))));
-        adrDTO.setPicture("/picture");
-        adrDTO.setCreationDate(new Date());
-        adrDTO.setAreaLevel1("Tablada");
-        adrDTO.setAreaLevel2("La Matanza");
-        adrDTO.setLatitude(-34.687856);
-        adrDTO.setLongitude(-58.529288);
-        adrDTO.setRighNow(true);
-        adrDTO.setDelivery(true);
+        AdvertisementDTO adDTO = new AdvertisementDTO();
+        adDTO.setUserId("rambo2");
+        adDTO.setCategoryId("1-products");
+        adDTO.setItems(new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete"))));
+        adDTO.setPicture("/picture");
+        adDTO.setCreationDate(new Date());
+        adDTO.setAreaLevel1("Tablada");
+        adDTO.setAreaLevel2("La Matanza");
+        adDTO.setLatitude(-34.687856);
+        adDTO.setLongitude(-58.529288);
+        adDTO.setRighNow(true);
+        adDTO.setDelivery(true);
 
-        Advertisement ad = advertisementService.creationAdvertisement(adrDTO);
+        Advertisement ad = advertisementService.creationAdvertisement(adDTO);
 
         FilterDTO filter = new FilterDTO();
         filter.setLatitude(-34.687880);
@@ -260,11 +259,12 @@ public class AdvertisementAppTest {
         cacheService.putNearbyCityListCache(ratioKey, arealevelKey, cityList);
         cityList = cacheService.getNearbyCityListCache(ratioKey, arealevelKey);
 
-        Assert.isTrue(cityList.contains("Tablada") , "");
+        Assert.isTrue(cityList.contains("Tablada"), "");
 
         cacheService.removeNearbyPlaceCache(ratioKey);
         cityList = cacheService.getNearbyCityListCache(ratioKey, arealevelKey);
-        Assert.isTrue(cityList == null , "");
+        Assert.isTrue(cityList == null, "");
     }
+
 
 }

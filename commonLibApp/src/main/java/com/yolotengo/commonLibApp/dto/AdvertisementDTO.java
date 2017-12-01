@@ -17,10 +17,38 @@ public class AdvertisementDTO {
     private Date creationDate;
 
     private String areaLevel1;
+    private String areaLevel2;
+    private double latitude;
+    private double longitude;
     private double distance;
 
     private boolean righNow;
     private boolean delivery;
+
+
+    public String getAreaLevel2() {
+        return areaLevel2;
+    }
+
+    public void setAreaLevel2(String areaLevel2) {
+        this.areaLevel2 = areaLevel2;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 
     public String getId() {
         return id;

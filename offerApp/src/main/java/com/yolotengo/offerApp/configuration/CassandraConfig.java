@@ -17,7 +17,7 @@ import java.util.List;
 
 @Configuration
 @PropertySource(value = {"classpath:cassandra.properties"})
-@EnableCassandraRepositories(basePackages = {"com.yolotengo.advertisementApp"})
+@EnableCassandraRepositories(basePackages = {"com.yolotengo.offerApp"})
 public class CassandraConfig extends AbstractCassandraConfiguration{
 
     @Autowired
@@ -47,7 +47,7 @@ public class CassandraConfig extends AbstractCassandraConfiguration{
 
     @Override
     public String[] getEntityBasePackages() {
-        return new String[]{"com.yolotengo.advertisementApp"};
+        return new String[]{"com.yolotengo.offerApp"};
     }
 
 

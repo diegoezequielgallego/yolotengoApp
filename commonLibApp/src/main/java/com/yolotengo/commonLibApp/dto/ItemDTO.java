@@ -12,6 +12,24 @@ public class ItemDTO {
 
     private String name;
     private String description;
+    private String gotItem;
+    private String price;
+
+    public String getGotItem() {
+        return gotItem;
+    }
+
+    public void setGotItem(String gotItem) {
+        this.gotItem = gotItem;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
 
     public String getName() {
         return name;

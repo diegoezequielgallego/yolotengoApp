@@ -16,33 +16,28 @@ public class Offer {
     @PrimaryKeyColumn(name = "id",ordinal = 0,type = PrimaryKeyType.CLUSTERED)
     private UUID id = UUIDs.timeBased();
 
-    @PrimaryKeyColumn(name = "areaLevel1",ordinal = 2,type = PrimaryKeyType.PARTITIONED)
-    private String areaLevel1;
+    @PrimaryKeyColumn(name = "idAdvertisement",ordinal = 1,type = PrimaryKeyType.PARTITIONED)
+    private UUID idAdvertisement;
+
+    @Column(value = "idSeller")
+    private String idSeller;
+
+    @PrimaryKeyColumn(name = "idBuyer",ordinal = 2,type = PrimaryKeyType.PARTITIONED)
+    private String idBuyer;
+
+    @Column(value = "itemJason")
+    private String itemJason;
 
     @Column(value = "creationDate")
     private Date creationDate;
 
-    public UUID getId() {
-        return id;
-    }
+    @Column(value = "send")
+    private boolean send;
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    @Column(value = "price")
+    private double price;
 
-    public String getAreaLevel1() {
-        return areaLevel1;
-    }
+    @Column(value = "buyerAccept")
+    private boolean buyerAccept;
 
-    public void setAreaLevel1(String areaLevel1) {
-        this.areaLevel1 = areaLevel1;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
 }

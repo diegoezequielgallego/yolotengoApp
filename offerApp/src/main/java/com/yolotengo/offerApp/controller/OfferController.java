@@ -1,7 +1,7 @@
 package com.yolotengo.offerApp.controller;
 
-import com.yolotengo.advertisementApp.service.AdvertisementService;
-import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
+import com.yolotengo.commonLibApp.dto.OfferDTO;
+import com.yolotengo.offerApp.service.OfferService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,21 +18,21 @@ import javax.websocket.server.PathParam;
  * Created by dgallego on 23/11/2017.
  */
 @RestController
-@RequestMapping("/advertisement")
-public class AdvertisementController {
+@RequestMapping("/offer")
+public class OfferController {
 
-    public static final Logger logger = LoggerFactory.getLogger(AdvertisementController.class);
+    public static final Logger logger = LoggerFactory.getLogger(OfferController.class);
 
     @Autowired
-    AdvertisementService advertisementService;
+    OfferService offerService;
 
     @Autowired
     private StringRedisTemplate template;
 
-    @RequestMapping(value = "/creation/advertisement", method = RequestMethod.POST)
-    public ResponseEntity<?> creationAdvertisement(@PathParam("adDTO") AdvertisementRequestDTO adrDTO) {
+    @RequestMapping(value = "/creation/offer", method = RequestMethod.POST)
+    public ResponseEntity<?> creationAdvertisement(@PathParam("adDTO") OfferDTO offerDTO) {
         try {
-            advertisementService.creationAdvertisement(adrDTO);
+
             return ResponseEntity.ok(HttpStatus.OK);
         }catch (Exception e){
             return ResponseEntity.ok(HttpStatus.SERVICE_UNAVAILABLE);

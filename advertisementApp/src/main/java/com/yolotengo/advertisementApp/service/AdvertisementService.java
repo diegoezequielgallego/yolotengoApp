@@ -3,7 +3,6 @@ package com.yolotengo.advertisementApp.service;
 import com.yolotengo.advertisementApp.model.Advertisement;
 import com.yolotengo.advertisementApp.repositories.AdvertisementRepository;
 import com.yolotengo.commonLibApp.dto.AdvertisementDTO;
-import com.yolotengo.commonLibApp.dto.AdvertisementRequestDTO;
 import com.yolotengo.commonLibApp.dto.FilterDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,19 +32,19 @@ public class AdvertisementService {
     @Autowired
     private GeoLocationService geoLocationService;
 
-    public Advertisement creationAdvertisement(AdvertisementRequestDTO adrDTO) {
+    public Advertisement creationAdvertisement(AdvertisementDTO adDTO) {
         Advertisement ad = new Advertisement();
         ad.setCreationDate(new Date());
-        ad.setItemJason(serializationService.serializer(adrDTO.getItems()));
-        ad.setUserId(adrDTO.getUserId());
-        ad.setAreaLevel1(adrDTO.getAreaLevel1());
-        ad.setAreaLevel2(adrDTO.getAreaLevel2());
-        ad.setCategoryId(adrDTO.getCategoryId());
-        ad.setPicture(adrDTO.getPicture());
-        ad.setLatitue(adrDTO.getLatitude());
-        ad.setLongitude(adrDTO.getLongitude());
-        ad.setRighNow(adrDTO.isRighNow());
-        ad.setDelivery(adrDTO.isDelivery());
+        ad.setItemJason(serializationService.serializer(adDTO.getItems()));
+        ad.setUserId(adDTO.getUserId());
+        ad.setAreaLevel1(adDTO.getAreaLevel1());
+        ad.setAreaLevel2(adDTO.getAreaLevel2());
+        ad.setCategoryId(adDTO.getCategoryId());
+        ad.setPicture(adDTO.getPicture());
+        ad.setLatitue(adDTO.getLatitude());
+        ad.setLongitude(adDTO.getLongitude());
+        ad.setRighNow(adDTO.isRighNow());
+        ad.setDelivery(adDTO.isDelivery());
         ad = advertisementRepository.save(ad);
 
         cacheService.putAdvertisementCache(ad);
