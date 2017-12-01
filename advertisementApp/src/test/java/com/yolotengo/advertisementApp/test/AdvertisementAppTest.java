@@ -11,7 +11,9 @@ import com.yolotengo.advertisementApp.SpringBootCRUDApp;
 import com.yolotengo.advertisementApp.configuration.CassandraConfig;
 import com.yolotengo.advertisementApp.configuration.SpringRedisConfig;
 import com.yolotengo.advertisementApp.model.Advertisement;
+import com.yolotengo.advertisementApp.model.UserAdvertisement;
 import com.yolotengo.advertisementApp.repositories.AdvertisementRepository;
+import com.yolotengo.advertisementApp.repositories.UserAdvertisementRepository;
 import com.yolotengo.advertisementApp.service.AdvertisementService;
 import com.yolotengo.advertisementApp.service.CacheService;
 import com.yolotengo.advertisementApp.service.GeoLocationService;
@@ -45,6 +47,9 @@ public class AdvertisementAppTest {
     private AdvertisementRepository advertisementRepository;
 
     @Autowired
+    private UserAdvertisementRepository userAdvertisementRepository;
+
+    @Autowired
     private SerializationService serializationService;
 
     @Autowired
@@ -56,7 +61,7 @@ public class AdvertisementAppTest {
     @Test
     public void testCreationAdvertisement() {
         AdvertisementDTO adDTO = new AdvertisementDTO();
-        adDTO.setUserId("rambo");
+        adDTO.setUserId("rocky");
         adDTO.setCategoryId("servicios");
         adDTO.setItems(new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete"))));
         adDTO.setPicture("/picture");
@@ -68,20 +73,23 @@ public class AdvertisementAppTest {
         adDTO.setRighNow(true);
         adDTO.setDelivery(true);
 
-        Advertisement ad = advertisementService.creationAdvertisement(adDTO);
+        adDTO = advertisementService.creationAdvertisement(adDTO);
 
-        String advertisementId = ad.getId().toString();
-        String advertisementArea = ad.getAreaLevel1();
+        String advertisementId = adDTO.getId().toString();
+        String advertisementArea = adDTO.getAreaLevel1();
 
         Assert.notNull(advertisementId, "");
 
-        ad = cacheService.getAdvertisementCache(advertisementArea, advertisementId);
+        Advertisement ad = cacheService.getAdvertisementCache(advertisementArea, advertisementId);
         Assert.notNull(ad, "");
 
         advertisementService.removeAdvertisement(ad);
 
         ad = cacheService.getAdvertisementCache(advertisementArea, advertisementId);
         Assert.isTrue(ad == null, "");
+
+        List<UserAdvertisement> userAdList = userAdvertisementRepository.findByUser(adDTO.getUserId());
+        userAdvertisementRepository.delete(userAdList);
 
     }
 
@@ -219,7 +227,7 @@ public class AdvertisementAppTest {
         adDTO.setRighNow(true);
         adDTO.setDelivery(true);
 
-        Advertisement ad = advertisementService.creationAdvertisement(adDTO);
+        adDTO = advertisementService.creationAdvertisement(adDTO);
 
         FilterDTO filter = new FilterDTO();
         filter.setLatitude(-34.687880);
@@ -239,6 +247,10 @@ public class AdvertisementAppTest {
         logger.warn("result found: " + advertisementList.size());
         logger.warn("time for result: " + (end - start));
 
+
+        String advertisementId = adDTO.getId().toString();
+        String advertisementArea = adDTO.getAreaLevel1();
+        Advertisement ad = cacheService.getAdvertisementCache(advertisementArea, advertisementId);
         Assert.isTrue(!advertisementList.isEmpty(), "");
         advertisementService.removeAdvertisement(ad);
     }
@@ -264,6 +276,44 @@ public class AdvertisementAppTest {
         cacheService.removeNearbyPlaceCache(ratioKey);
         cityList = cacheService.getNearbyCityListCache(ratioKey, arealevelKey);
         Assert.isTrue(cityList == null, "");
+    }
+
+
+
+
+    @Test
+    public void testGetAdvertisementByUser() throws Exception {
+        AdvertisementDTO adDTO = new AdvertisementDTO();
+        adDTO.setUserId("charly");
+        adDTO.setCategoryId("servicios");
+        adDTO.setItems(new ArrayList<>(Arrays.asList(new ItemDTO("machete", "quiero un machete"))));
+        adDTO.setPicture("/picture");
+        adDTO.setCreationDate(new Date());
+        adDTO.setAreaLevel1("Tablada");
+        adDTO.setAreaLevel2("La Matanza");
+        adDTO.setLatitude(-34.687886);
+        adDTO.setLongitude(-58.529208);
+        adDTO.setRighNow(true);
+        adDTO.setDelivery(true);
+
+        adDTO = advertisementService.creationAdvertisement(adDTO);
+
+        List<AdvertisementDTO> adDTOList = advertisementService.getAdvertisementByUser(adDTO.getUserId());
+        Assert.isTrue(adDTOList.size() > 0, "");
+        Assert.isTrue(adDTOList.get(0).getUserId().equals(adDTO.getUserId()), "");
+
+        String advertisementId = adDTO.getId().toString();
+        String advertisementArea = adDTO.getAreaLevel1();
+
+        Advertisement ad = cacheService.getAdvertisementCache(advertisementArea, advertisementId);
+        advertisementService.removeAdvertisement(ad);
+
+        List<UserAdvertisement> userAdList = userAdvertisementRepository.findByUser(adDTO.getUserId());
+        userAdvertisementRepository.delete(userAdList);
+
+        userAdList = userAdvertisementRepository.findByUser(adDTO.getUserId());
+        Assert.isTrue(userAdList.size() == 0, "");
+
     }
 
 

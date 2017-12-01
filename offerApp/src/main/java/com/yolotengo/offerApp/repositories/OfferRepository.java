@@ -5,6 +5,7 @@ import org.springframework.data.cassandra.repository.CassandraRepository;
 import org.springframework.data.cassandra.repository.Query;
 
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -12,7 +13,7 @@ import java.util.List;
  */
 public interface OfferRepository extends CassandraRepository<Offer> {
 
-    @Query("SELECT * FROM offer WHERE id =?0")
-    List<Offer> findByPlace(String id);
+    @Query("SELECT * FROM offer WHERE id = ?0 ALLOW FILTERING")
+    List<Offer> findById(UUID idad);
 
 }

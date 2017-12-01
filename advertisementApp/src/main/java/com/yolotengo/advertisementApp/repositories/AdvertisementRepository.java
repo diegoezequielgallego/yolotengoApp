@@ -16,4 +16,7 @@ public interface AdvertisementRepository extends CassandraRepository<Advertiseme
     @Query("SELECT * FROM advertisement WHERE areaLevel1 =?0")
     List<Advertisement> findByPlace(String areaLevel);
 
+    @Query("SELECT * FROM advertisement WHERE id = ?0 ALLOW FILTERING")
+    Advertisement findById(UUID idAdvertisement);
+
 }

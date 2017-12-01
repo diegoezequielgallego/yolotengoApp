@@ -5,8 +5,8 @@ import java.util.UUID;
 
 public class OfferDTO {
 
-    private UUID id;
-    private UUID idAdvertisement;
+    private String id;
+    private String idAdvertisement;
     private String idSeller;
     private String idBuyer;
     private String itemJason;
@@ -15,19 +15,19 @@ public class OfferDTO {
     private double price;
     private boolean buyerAccept;
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public UUID getIdAdvertisement() {
+    public String getIdAdvertisement() {
         return idAdvertisement;
     }
 
-    public void setIdAdvertisement(UUID idAdvertisement) {
+    public void setIdAdvertisement(String idAdvertisement) {
         this.idAdvertisement = idAdvertisement;
     }
 

@@ -1,7 +1,9 @@
 package com.yolotengo.advertisementApp.service;
 
 import com.yolotengo.advertisementApp.model.Advertisement;
+import com.yolotengo.advertisementApp.model.UserAdvertisement;
 import com.yolotengo.advertisementApp.repositories.AdvertisementRepository;
+import com.yolotengo.advertisementApp.repositories.UserAdvertisementRepository;
 import com.yolotengo.commonLibApp.dto.AdvertisementDTO;
 import com.yolotengo.commonLibApp.dto.FilterDTO;
 import org.slf4j.Logger;
@@ -24,6 +26,9 @@ public class AdvertisementService {
     private AdvertisementRepository advertisementRepository;
 
     @Autowired
+    private UserAdvertisementRepository userAdvertisementRepository;
+
+    @Autowired
     private SerializationService serializationService;
 
     @Autowired
@@ -32,7 +37,7 @@ public class AdvertisementService {
     @Autowired
     private GeoLocationService geoLocationService;
 
-    public Advertisement creationAdvertisement(AdvertisementDTO adDTO) {
+    public AdvertisementDTO creationAdvertisement(AdvertisementDTO adDTO) {
         Advertisement ad = new Advertisement();
         ad.setCreationDate(new Date());
         ad.setItemJason(serializationService.serializer(adDTO.getItems()));
@@ -47,9 +52,39 @@ public class AdvertisementService {
         ad.setDelivery(adDTO.isDelivery());
         ad = advertisementRepository.save(ad);
 
+        UserAdvertisement userAd = new UserAdvertisement();
+        userAd.setIdAdvertisement(ad.getId());
+        userAd.setUserId(adDTO.getUserId());
+        userAd.setReposted(false);
+        userAdvertisementRepository.save(userAd);
+
+        adDTO.setId(ad.getId().toString());
         cacheService.putAdvertisementCache(ad);
         logger.warn("create new Advertisement, id:" + ad.getId());
-        return ad;
+        return adDTO;
+    }
+
+
+    public List<AdvertisementDTO> getAdvertisementByUser(String userId) {
+        List<UserAdvertisement> userAdList = userAdvertisementRepository.findByUser(userId);
+        List<AdvertisementDTO> advertisementDTOList = new ArrayList<>();
+        AdvertisementDTO adDTO;
+        for (UserAdvertisement userAd : userAdList) {
+            Advertisement advertisement = advertisementRepository.findById(userAd.getIdAdvertisement());
+            adDTO = new AdvertisementDTO();
+            adDTO.setId(advertisement.getId().toString());
+            adDTO.setCreationDate(advertisement.getCreationDate());
+            adDTO.setAreaLevel1(advertisement.getAreaLevel1());
+            adDTO.setUserId(advertisement.getUserId());
+            adDTO.setItems(serializationService.deserializer(advertisement.getItemJason(), ArrayList.class));
+            adDTO.setCategoryId(advertisement.getCategoryId());
+            adDTO.setPicture(advertisement.getPicture());
+            adDTO.setDelivery(advertisement.isDelivery());
+            adDTO.setRighNow(advertisement.isRighNow());
+            advertisementDTOList.add(adDTO);
+        }
+
+        return advertisementDTOList;
     }
 
 
