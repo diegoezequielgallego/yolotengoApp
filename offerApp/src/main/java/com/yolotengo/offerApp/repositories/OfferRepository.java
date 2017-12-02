@@ -16,4 +16,7 @@ public interface OfferRepository extends CassandraRepository<Offer> {
     @Query("SELECT * FROM offer WHERE id = ?0 ALLOW FILTERING")
     List<Offer> findById(UUID idad);
 
+    @Query("SELECT * FROM offer WHERE idAdvertisement = ?0")
+    List<Offer> findByIdAdvertisement(UUID id);
+
 }

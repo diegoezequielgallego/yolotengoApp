@@ -14,7 +14,7 @@ import java.util.UUID;
 @Table(value = "offer")
 public class Offer {
 
-    @PrimaryKeyColumn(name = "id",ordinal = 1,type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+    @PrimaryKeyColumn(name = "id",ordinal = 1,type = PrimaryKeyType.CLUSTERED)
     private UUID id = UUIDs.timeBased();
 
     @PrimaryKeyColumn(name = "idAdvertisement",ordinal = 0,type = PrimaryKeyType.PARTITIONED)
@@ -23,7 +23,7 @@ public class Offer {
     @Column(value = "idSeller")
     private String idSeller;
 
-    @PrimaryKeyColumn(name = "idBuyer",ordinal = 1,type = PrimaryKeyType.PARTITIONED)
+    @Column(value = "idBuyer")
     private String idBuyer;
 
     @Column(value = "itemJason")
