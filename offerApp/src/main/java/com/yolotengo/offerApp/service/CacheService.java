@@ -44,11 +44,30 @@ public class CacheService {
         Offer offer;
         List<Offer> offerList = new ArrayList<>();
         Collection<Object> objectsList = template.opsForHash().entries(idAdvertisement).values();
-        for (Object advertisementObj : objectsList) {
-            offer = serializationService.deserializer(advertisementObj.toString(), Offer.class);
+        for (Object offerObj : objectsList) {
+            offer = serializationService.deserializer(offerObj.toString(), Offer.class);
             offerList.add(offer);
         }
         return offerList;
+    }
+
+    public void putSellerAdvertisementCache(String sellerId, String idAdvertisement) {
+        List<String> idAdvertisementList = new ArrayList<>();
+        Collection<Object> objectsList = template.opsForHash().entries(sellerId).values();
+        for (Object offerObj : objectsList) {
+            idAdvertisementList.add(serializationService.deserializer(offerObj.toString(), String.class));
+        }
+        idAdvertisementList.add(idAdvertisement);
+        template.opsForHash().put(sellerId, String.class,serializationService.serializer(idAdvertisementList));
+    }
+
+    public List<String> gettSellerAdvertisementCache(String sellerId) {
+        List<String> idAdvertisementList = new ArrayList<>();
+        Collection<Object> objectsList = template.opsForHash().entries(sellerId).values();
+        for (Object offerObj : objectsList) {
+            idAdvertisementList.add(serializationService.deserializer(offerObj.toString(), String.class));
+        }
+        return idAdvertisementList;
     }
 
 }
