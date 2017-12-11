@@ -72,6 +72,16 @@ public class OfferService {
         return offerDTOList;
     }
 
+    public OfferDTO updateOffer(OfferDTO offerDTO) throws Exception{
+        Offer offer = cacheService.getOfferByIdCache(offerDTO.getIdAdvertisement(), offerDTO.getId());
+
+        offer.setPrice(offerDTO.getPrice());
+        offer = offerRepository.save(offer);
+        cacheService.putOfferCache(offer);
+
+        return offerDTO;
+    }
+
 
 }
 
