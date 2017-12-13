@@ -36,7 +36,7 @@ public class OfferService {
         offer.setIdBuyer(offerDTO.getIdBuyer());
         offer.setItemJason(offerDTO.getItemJason());
         offer.setCreationDate(new Date());
-        offer.setSend(offer.isSend());
+        offer.setSend(offerDTO.isSend());
         offer.setPrice(offerDTO.getPrice());
         offer.setBuyerAccept(false);
 

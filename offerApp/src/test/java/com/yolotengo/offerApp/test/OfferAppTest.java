@@ -4,6 +4,7 @@ import com.yolotengo.offerApp.SpringBootCRUDApp;
 import com.yolotengo.offerApp.configuration.CassandraConfig;
 import com.yolotengo.offerApp.configuration.SpringRedisConfig;
 import com.yolotengo.offerApp.repositories.OfferRepository;
+import com.yolotengo.offerApp.service.OfferService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -26,6 +27,12 @@ public class OfferAppTest {
 
     @Autowired
     private OfferRepository offerRepository;
+
+    @Autowired
+    OfferService offerService;
+
+
+
 
 
 }
