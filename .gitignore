@@ -1,3 +1,5 @@
 */target
 *.idea
 *.iml
+loginApp/.mvn/wrapper/maven-wrapper.properties
+loginApp/.mvn/wrapper/maven-wrapper.jar
