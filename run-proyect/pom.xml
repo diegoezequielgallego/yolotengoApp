@@ -22,6 +22,7 @@
         <module>../offerApp</module>
         <module>../commonLibApp</module>
         <module>../integrationApp</module>
-        <module>../loginApp</module>
+        <module>../usserApp</module>
+        <module>../gatewayApp</module>
     </modules>
 </project>
