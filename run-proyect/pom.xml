@@ -23,5 +23,6 @@
         <module>../commonLibApp</module>
         <module>../integrationApp</module>
         <module>../usserApp</module>
+        <module>../loginApp</module>
     </modules>
 </project>
