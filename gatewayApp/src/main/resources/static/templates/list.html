@@ -2,21 +2,19 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="formcontainer">
-                    <div class="row">
-                        <div>
-                            <a href="javascript:void(0);" onclick="fbLogin()" id="fbLink"><img src="fblogin.png"/></a>
-                        </div>
-                        <div>
+                <div class="row">
+                    <div>
+                        <div class="fb-login-button" data-max-rows="1" data-size="large"
+                             data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false"
+                             data-use-continue-as="false"></div>
 
-                            <label class="col-md-2 control-lable" >{{data.text}}</label>
-                        </div>
-
-                        <div class="form-actions floatRight">
-                            <button type="button" ng-click="fbLogin()" class="btn btn-warning btn-sm"
-                                    ng-disabled="myForm.$pristine">view all mutants
-                            </button>
-                        </div>
                     </div>
+                    <div class="form-actions floatRight">
+                        <button type="button" ng-click="fbLogin()" class="btn btn-warning btn-sm"
+                                ng-disabled="myForm.$pristine">login facebook
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

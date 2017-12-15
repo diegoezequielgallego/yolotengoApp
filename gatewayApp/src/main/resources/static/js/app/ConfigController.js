@@ -1,15 +1,12 @@
 angular.module('crudApp').controller('ConfigController', ['ConfigService', '$scope',  
 	function( service, $scope) {
 		
-		//se crean todas las variables y objetos dentro de 
-		//otro asi a la hora de limpiarlos es mas optimo angular
 		$scope.data = {
 			registroMutantes: [],
-			dna : '',
-			text : 'lalal'
+			dna : ''
 		}
 
-        $scope.getMyLastName = function() {
+        $scope.getFacebookData = function() {
            service.getFacebookData().then(
                function (response) {
                    console.log(response.last_name);
@@ -22,13 +19,13 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
         $scope.fbLogin = function() {
             service.loginFB().then(
                 function (response) {
-                   console.log(response.last_name);
+                   console.log(response);
+                   $scope.getFacebookData();
                 },
                 function (errResponse) {
                 }
             );
         };
-
 
         $scope.fbAsyncInit = function() {
             FB.init({
@@ -52,7 +49,6 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
             $scope.data.buttonRunDisable = true;
             $scope.data.successMessage = 'Corriendo ...';
 
-            //var dna = ["ATGGGG", "CATTGA", "TTATGA", "TGAAGA", "CCCCTA", "TCACTG"];
             var dna = $scope.data.dna.split(',');
             
             service.isMutant({dna: dna}).then(

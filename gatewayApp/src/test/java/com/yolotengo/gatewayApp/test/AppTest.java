@@ -13,8 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
 import com.yolotengo.gatewayApp.configuration.JpaConfiguration;
-import com.yolotengo.gatewayApp.dto.CountDTO;
-import com.yolotengo.gatewayApp.repositories.MutantRepository;
+import com.yolotengo.gatewayApp.repositories.UserRepository;
 import com.yolotengo.gatewayApp.service.MutantService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -25,7 +24,7 @@ public class AppTest {
 	MutantService mutantService;
 
 	@Autowired
-	MutantRepository mutantRepository;
+	UserRepository mutantRepository;
 
 
 	@Test

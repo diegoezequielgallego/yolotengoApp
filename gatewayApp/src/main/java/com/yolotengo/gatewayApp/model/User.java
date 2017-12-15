@@ -8,8 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="MUTANT")
-public class Mutant {
+public class User {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -24,11 +23,11 @@ public class Mutant {
 	@Column(name="DNA", nullable=false)
 	private String dna;
 	
-	public Mutant() {
+	public User() {
 
 	}
 	
-	public Mutant(String name, int isMutant, String dna) {
+	public User(String name, int isMutant, String dna) {
 		this.name = name;
 		this.isMutant = isMutant;
 		this.dna = dna;

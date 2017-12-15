@@ -2,10 +2,7 @@ angular.module('crudApp').factory('ConfigService',
     ['$http', '$q', 'urls',
         function ($http, $q, urls) {
 
-            //Se crean todas las funciones dentro del objeto factory asi
-            //a la hora de limpiarlo angular es mas optimo
             var factory = {
-
                 getFacebookData: function () {
                     var deferred = $q.defer();
                     FB.api('/me', {
@@ -31,8 +28,6 @@ angular.module('crudApp').factory('ConfigService',
                     });
                     return deferred.promise;
                 }
-
-
             };
 
             return factory;
