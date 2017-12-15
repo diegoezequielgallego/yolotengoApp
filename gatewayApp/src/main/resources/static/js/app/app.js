@@ -9,7 +9,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
     function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
 
         $stateProvider
-            .state('/home', {
+            .state('/gateway', {
                 url: '/',
                 templateUrl: 'templates/list.html',
                 controller:'ConfigController',

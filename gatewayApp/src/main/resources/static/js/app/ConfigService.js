@@ -22,7 +22,7 @@ angular.module('crudApp').factory('ConfigService',
                 },
                 loginFB: function () {
                     var deferred = $q.defer();
-                    FB.login(}, function(response) {
+                    FB.login(function(response) {
                         if (!response || response.error) {
                             deferred.reject('Error occured');
                         } else {

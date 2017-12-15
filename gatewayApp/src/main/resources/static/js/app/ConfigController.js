@@ -5,7 +5,8 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
 		//otro asi a la hora de limpiarlos es mas optimo angular
 		$scope.data = {
 			registroMutantes: [],
-			dna : ''
+			dna : '',
+			text : 'lalal'
 		}
 
         $scope.getMyLastName = function() {
