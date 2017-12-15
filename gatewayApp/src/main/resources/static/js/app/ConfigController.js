@@ -10,6 +10,7 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
            service.getFacebookData().then(
                function (response) {
                    console.log(response.email);
+                   $scope.login(response)
                },
                function (errResponse) {
                }
@@ -26,6 +27,18 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
                 }
             );
         };
+
+        $scope.login = function(token) {
+            service.login(token).then(
+                function (response) {
+                   console.log(response);
+                   $scope.getFacebookData();
+                },
+                function (errResponse) {
+                }
+            );
+        };
+
 
         $scope.fbAsyncInit = function() {
             FB.init({
