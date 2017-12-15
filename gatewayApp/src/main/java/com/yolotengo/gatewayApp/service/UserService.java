@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Scope("singleton")
-public class MutantService {
+public class UserService {
 	
 	public static final Logger logger = LoggerFactory.getLogger(RestApiController.class);
 
