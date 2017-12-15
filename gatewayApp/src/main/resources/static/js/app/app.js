@@ -7,13 +7,11 @@ app.constant('urls', {
 
 app.config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
     function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
-		
-		//genero el modulo principal de angular haciedno que responda al app/
-		//retornando la pagina list con el controlador Config y su service inyectado usando la lib lazyLoad
+
         $stateProvider
-            .state('home', {
+            .state('/home', {
                 url: '/',
-                templateUrl: 'partials/list',
+                templateUrl: 'templates/list.html',
                 controller:'ConfigController',
                 controllerAs:'ctrl',
                 resolve: {
@@ -22,7 +20,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
                              name: 'crudApp',
                              files: [
                             	 'js/app/ConfigController.js',
-                                 'js/app/ConfigService.js' 
+                                 'js/app/ConfigService.js'
                              ]
                          }]);
                      }]
