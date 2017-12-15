@@ -9,7 +9,7 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
         $scope.getFacebookData = function() {
            service.getFacebookData().then(
                function (response) {
-                   console.log(response.last_name);
+                   console.log(response.email);
                },
                function (errResponse) {
                }

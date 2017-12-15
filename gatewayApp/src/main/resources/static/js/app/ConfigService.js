@@ -6,8 +6,7 @@ angular.module('crudApp').factory('ConfigService',
                 getFacebookData: function () {
                     var deferred = $q.defer();
                     FB.api('/me', {
-                       locale: 'en_US',
-                       fields: 'id,first_name,last_name,email,link,gender,locale,picture'
+                       fields: 'id,first_name,last_name,email,link,gender,picture'
                     }, function(response) {
                         if (!response || response.error) {
                             deferred.reject('Error occured');
