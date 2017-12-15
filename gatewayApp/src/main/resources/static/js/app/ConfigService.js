@@ -6,49 +6,32 @@ angular.module('crudApp').factory('ConfigService',
             //a la hora de limpiarlo angular es mas optimo
             var factory = {
 
-                getStats: function () {
+                getFacebookData: function () {
                     var deferred = $q.defer();
-                    $http.get(urls.USER_SERVICE_API + "stats")
-                        .then(
-                        function (response) {
-                            deferred.resolve(response.data);
-                        },
-                        function (errResponse) {
-                            deferred.reject(errResponse);
+                    FB.api('/me', {
+                       locale: 'en_US',
+                       fields: 'id,first_name,last_name,email,link,gender,locale,picture'
+                    }, function(response) {
+                        if (!response || response.error) {
+                            deferred.reject('Error occured');
+                        } else {
+                            deferred.resolve(response);
                         }
-                    );
+                    });
                     return deferred.promise;
                 },
-
-                getallmutants: function () {
+                loginFB: function () {
                     var deferred = $q.defer();
-                    $http.get(urls.USER_SERVICE_API + "getallmutants/")
-                        .then(
-                        function (response) {
-                            deferred.resolve(response.data);
-                        },
-                        function (errResponse) {
-                            deferred.reject(errResponse);
+                    FB.login(}, function(response) {
+                        if (!response || response.error) {
+                            deferred.reject('Error occured');
+                        } else {
+                            deferred.resolve(response);
                         }
-                    );
-                    return deferred.promise;
-                },
-
-                isMutant: function (dna) {
-                    var deferred = $q.defer();
-                    $http.post(urls.USER_SERVICE_API + "mutant/", dna)
-                        .then(
-                        function (response) {
-                            //loadAllUsers();
-                            deferred.resolve(response.data);
-                        },
-                        function (errResponse) {
-                            //console.error('Error while creating User : '+errResponse.data.errorMessage);
-                            deferred.reject(errResponse);
-                        }
-                    );
+                    });
                     return deferred.promise;
                 }
+
 
             };
 

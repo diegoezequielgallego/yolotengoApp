@@ -5,12 +5,46 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
 		//otro asi a la hora de limpiarlos es mas optimo angular
 		$scope.data = {
 			registroMutantes: [],
-			successMessage : '',
-			errorMessage : '',
-			countMutantDna: {},
-			buttonRunDisable : false,
 			dna : ''
 		}
+
+        $scope.getMyLastName = function() {
+           service.getFacebookData().then(
+               function (response) {
+                   console.log(response.last_name);
+               },
+               function (errResponse) {
+               }
+           );
+        };
+
+        $scope.fbLogin = function() {
+            service.loginFB().then(
+                function (response) {
+                   console.log(response.last_name);
+                },
+                function (errResponse) {
+                }
+            );
+        };
+
+
+        $scope.fbAsyncInit = function() {
+            FB.init({
+              appId: '885467881612994',
+              status: true,
+              cookie: true,
+              xfbml: true,
+              version: 'v2.4'
+            });
+        };
+
+        $scope.init = function(){
+            $scope.fbAsyncInit();
+        };
+
+        $scope.init();
+
 
         $scope.submit = function() {
             console.log('Submitting');
@@ -36,34 +70,7 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
         }
         
         
-        $scope.getallmutants = function() {
-            service.getallmutants().then(
-                function (response) {
-                	$scope.data.registroMutantes = response;
-                	$scope.data.buttonRunDisable = false;
-                },
-                function (errResponse) {
-                    console.error('Error while processing , Error :' + errResponse.data);
-                    $scope.data.buttonRunDisable = false;
-                }
-            );
-            
-        }
 
-        $scope.getStats = function() {
-            $scope.data.buttonRunDisable = true;
-            service.getStats().then(
-                function (response) {
-                    $scope.data.countMutantDna = response;
-                    $scope.data.buttonRunDisable = false;
-                },
-                function (errResponse) {
-                    console.error('Error while processing , Error :' + errResponse.data);
-                    $scope.data.buttonRunDisable = false;
-                }
-            );
-
-        }
 
     }
 
