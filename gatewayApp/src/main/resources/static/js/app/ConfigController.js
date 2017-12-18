@@ -49,9 +49,15 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
             );
         };
 
-
-
-
+        $scope.logOut = function(token) {
+            service.logOut(token).then(
+                function (response) {
+                   console.log(response);
+                },
+                function (errResponse) {
+                }
+            );
+        };
 
         $scope.fbAsyncInit = function() {
             FB.init({

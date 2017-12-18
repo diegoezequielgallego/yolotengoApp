@@ -14,6 +14,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @Service
 @Scope("singleton")
 public class UserService {
@@ -26,7 +29,7 @@ public class UserService {
 		FacebookClient fbClient = new DefaultFacebookClient(token, Version.VERSION_2_5);
 		User me = fbClient.fetchObject("me", User.class, Parameter.with("fields", "email,first_name,last_name,gender"));
 
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(me.getLastName(), null, null);
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(me.getId(), null, null);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
@@ -34,4 +37,9 @@ public class UserService {
 
 	}
 
+	public void logout(HttpServletRequest request) {
+		System.out.println("llego al logout");
+		HttpSession session = request.getSession(false);
+		session.invalidate();
+	}
 }

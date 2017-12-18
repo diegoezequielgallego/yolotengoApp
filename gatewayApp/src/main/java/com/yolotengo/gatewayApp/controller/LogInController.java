@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yolotengo.gatewayApp.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api")
 public class LogInController {
@@ -22,6 +24,11 @@ public class LogInController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public void login(@RequestBody String fbToken) {
 		userService.isUserExists(fbToken);
+	}
+
+	@RequestMapping(value = "/logout", method = RequestMethod.POST)
+	public void logout(HttpServletRequest request) {
+		userService.logout(request);
 	}
 
 

@@ -52,6 +52,19 @@ angular.module('crudApp').factory('ConfigService',
                         }
                     );
                     return deferred.promise;
+                },
+                logOut: function () {
+                    var deferred = $q.defer();
+                    $http.post(urls.USER_SERVICE_API + "logout")
+                        .then(
+                        function (response) {
+                            deferred.resolve(response.data);
+                        },
+                        function (errResponse) {
+                            deferred.reject(errResponse);
+                        }
+                    );
+                    return deferred.promise;
                 }
 
 
