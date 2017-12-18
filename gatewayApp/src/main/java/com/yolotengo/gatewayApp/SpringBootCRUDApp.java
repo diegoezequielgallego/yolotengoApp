@@ -1,6 +1,7 @@
 package com.yolotengo.gatewayApp;
 
 import com.yolotengo.gatewayApp.configuration.JpaConfiguration;
+import com.yolotengo.gatewayApp.configuration.SecurityConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -8,7 +9,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Import;
 
 
-@Import(JpaConfiguration.class)
+@Import({JpaConfiguration.class, SecurityConfiguration.class})
 @SpringBootApplication(scanBasePackages = {"com.yolotengo.gatewayApp"})
 public class SpringBootCRUDApp extends SpringBootServletInitializer{
 

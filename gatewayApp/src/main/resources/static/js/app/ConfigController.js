@@ -39,6 +39,19 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
             );
         };
 
+        $scope.testSecurity = function() {
+            service.testSecurity().then(
+                function (response) {
+                   console.log(response);
+                },
+                function (errResponse) {
+                }
+            );
+        };
+
+
+
+
 
         $scope.fbAsyncInit = function() {
             FB.init({
@@ -55,32 +68,6 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
         };
 
         $scope.init();
-
-
-        $scope.submit = function() {
-            console.log('Submitting');
-            $scope.data.buttonRunDisable = true;
-            $scope.data.successMessage = 'Corriendo ...';
-
-            var dna = $scope.data.dna.split(',');
-            
-            service.isMutant({dna: dna}).then(
-                function (response) {
-                	$scope.data.successMessage = 'Es mutante';
-                	$scope.data.errorMessage='';
-                    $scope.data.buttonRunDisable = false;
-                },
-                function (errResponse) {
-                	$scope.data.errorMessage = 'Alerta: ' + errResponse.data.errorMessage;
-                	$scope.data.successMessage='';
-                	$scope.data.buttonRunDisable = false;
-                }
-            );
-           
-        }
-        
-        
-
 
     }
 

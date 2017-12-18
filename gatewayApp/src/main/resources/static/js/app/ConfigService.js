@@ -27,7 +27,7 @@ angular.module('crudApp').factory('ConfigService',
                     });
                     return deferred.promise;
                 },
-                 login: function (token) {
+                login: function (token) {
                     var deferred = $q.defer();
                     $http.post(urls.USER_SERVICE_API + "login", token)
                         .then(
@@ -39,7 +39,21 @@ angular.module('crudApp').factory('ConfigService',
                         }
                     );
                     return deferred.promise;
+                },
+                testSecurity: function () {
+                    var deferred = $q.defer();
+                    $http.get(urls.USER_SERVICE + "test")
+                        .then(
+                        function (response) {
+                            deferred.resolve(response.data);
+                        },
+                        function (errResponse) {
+                            deferred.reject(errResponse);
+                        }
+                    );
+                    return deferred.promise;
                 }
+
 
             };
 

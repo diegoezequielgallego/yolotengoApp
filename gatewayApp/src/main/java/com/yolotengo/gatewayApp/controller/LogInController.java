@@ -12,9 +12,9 @@ import com.yolotengo.gatewayApp.service.UserService;
 
 @RestController
 @RequestMapping("/api")
-public class RestApiController {
+public class LogInController {
 
-	public static final Logger logger = LoggerFactory.getLogger(RestApiController.class);
+	public static final Logger logger = LoggerFactory.getLogger(LogInController.class);
 
 	@Autowired
 	UserService userService;
@@ -23,5 +23,6 @@ public class RestApiController {
 	public void login(@RequestBody String fbToken) {
 		userService.isUserExists(fbToken);
 	}
+
 
 }

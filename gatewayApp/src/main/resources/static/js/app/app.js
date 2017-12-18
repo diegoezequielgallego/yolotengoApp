@@ -2,7 +2,8 @@ var app = angular.module('crudApp',['ui.router','ngStorage','oc.lazyLoad']);
 
 app.constant('urls', {
     BASE: 'http://localhost:8084/gateway',
-    USER_SERVICE_API : 'http://localhost:8084/gateway/api/'
+    USER_SERVICE_API : 'http://localhost:8084/gateway/api/',
+    USER_SERVICE : 'http://localhost:8084/gateway/service/'
 });
 
 app.config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider',
