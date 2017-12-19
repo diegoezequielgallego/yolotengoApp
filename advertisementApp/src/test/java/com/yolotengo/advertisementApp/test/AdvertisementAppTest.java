@@ -126,7 +126,7 @@ public class AdvertisementAppTest {
         //lat log radio y cant
         List<String> cityList = geoLocationService.getNearbyPlace(-34.687886, -58.529208, 30.0);
 
-        for (long i = 0; i <= 1000000; i++) {
+        for (long i = 0; i <= 100000; i++) {
 
             r = new Random();
             randomValueLatitue = rangeMinLatitue + (rangeMaxLatitue - rangeMinLatitue) * r.nextDouble();
