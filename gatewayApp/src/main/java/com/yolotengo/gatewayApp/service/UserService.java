@@ -11,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,12 +34,16 @@ public class UserService {
 		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(me.getId(), null, null);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
-		System.out.println(me.getEmail());
+		System.out.println(me.getId());
 
 	}
 
 	public void logout(HttpServletRequest request) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String name = authentication.getName();
+		System.out.println(name);
+
 		System.out.println("llego al logout");
 		HttpSession session = request.getSession(false);
 		session.invalidate();
