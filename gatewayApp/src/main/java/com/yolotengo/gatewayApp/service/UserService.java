@@ -1,19 +1,18 @@
 package com.yolotengo.gatewayApp.service;
 
-import com.restfb.DefaultFacebookClient;
-import com.restfb.FacebookClient;
-import com.restfb.Parameter;
-import com.restfb.Version;
-import com.restfb.types.User;
 import com.yolotengo.gatewayApp.controller.LogInController;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.User;
+import org.springframework.social.facebook.api.UserOperations;
+import org.springframework.social.facebook.api.impl.FacebookTemplate;
+import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,13 +27,19 @@ public class UserService {
 
 	public void isUserExists(String token){
 
-		FacebookClient fbClient = new DefaultFacebookClient(token, Version.VERSION_2_5);
-		User me = fbClient.fetchObject("me", User.class, Parameter.with("fields", "email,first_name,last_name,gender"));
+		//FacebookClient fbClient = new DefaultFacebookClient(token, Version.VERSION_2_5);
+		//User me = fbClient.fetchObject("me", User.class, Parameter.with("fields", "email,first_name,last_name,gender"));
 
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(me.getId(), null, null);
+		Facebook facebook = new FacebookTemplate(token);
+		//String email = facebook.userOperations().getUserProfile().getEmail();
+		String [] fields = { "id","name","birthday","email","location","hometown","gender","first_name","last_name"};
+		User user = facebook.fetchObject("me", User.class, fields);
+		String name=user.getId();
+		String birthday=user.getBirthday();
+
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(name, null, null);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
-		System.out.println(me.getId());
 
 	}
 

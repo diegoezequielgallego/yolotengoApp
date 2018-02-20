@@ -2,7 +2,7 @@ log_level: debug
 
 server:
   port: 8092
-  contextPath: /offerApp
+  contextPath: /usserApp
 
 datasource:
   sampleapp:
