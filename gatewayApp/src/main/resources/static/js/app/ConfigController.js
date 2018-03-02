@@ -20,7 +20,7 @@ angular.module('crudApp').controller('ConfigController', ['ConfigService', '$sco
             service.loginFB().then(
                 function (response) {
                    console.log(response);
-                   //$scope.getFacebookData();
+                   $scope.getFacebookData();
                    $scope.login(response.authResponse.accessToken);
                 },
                 function (errResponse) {

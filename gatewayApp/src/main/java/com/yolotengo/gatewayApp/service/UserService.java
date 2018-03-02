@@ -32,12 +32,11 @@ public class UserService {
 
 		Facebook facebook = new FacebookTemplate(token);
 		//String email = facebook.userOperations().getUserProfile().getEmail();
-		String [] fields = { "id","name","birthday","email","location","hometown","gender","first_name","last_name"};
+		String [] fields = { "id", "about", "age_range", "birthday",  "first_name", "gender", "last_name"};
 		User user = facebook.fetchObject("me", User.class, fields);
 		String name=user.getId();
-		String birthday=user.getBirthday();
 
-		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(name, null, null);
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, null);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
